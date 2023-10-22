@@ -1,7 +1,80 @@
 projet-ift712
 ==============================
 
-A short description of the project.
+Les étudiantes et étudiants inscrits au cours IFT712 sont tenus de faire un projet de session en python en équipe de 2 ou 3 (obligatoire). Le projet a pour objectif de tester au moins six méthodes de classification sur une base de données Kaggle (www.kaggle.com) avec la bibliothèque scikit-learn (https://scikit-learn.org). Les équipes sont libres de choisir la base de données de leur choix, mais une option simple est celle du challenge de classification de feuilles d’arbres (www.kaggle.com/c/leaf-classification). Pour ce projet, on s’attend à ce que les bonnes pratiques de cross-validation et de recherche d’hyper-paramètres soient mises de l’avant pour identifier la meilleure solution possible pour résoudre le problème. 
+
+Le barême de correction est le suivant : \
+Qualité du code - Commentaires 	 /10 \
+Choix de design 	 /10 \
+Gestion de projet (Git) 	 /10 \
+Rapport 	 /70 \
+... Démarche scientifique \
+	 /50 \
+... Analyse des résultats \
+	 /20
+
+Repo git organisation
+------------
+
+### Le repo git suit l'organisation Git Flow. 
+
+1 branche master \
+1 branche develop \
+1 branche feature par fonctionnalité \
+    ex : feature/random-forest \
+         feature/data-exploration  \
+1 branche hotfix par correction de bug 
+
+### comment utiliser les branches
+
+La branche principale de développement est la branche develop.  \
+Pour chaque nouvelle fonctionnalité une branches features est créées à partir de develop et mergées dans develop une fois terminée.  \
+On ne push jamais sur develop directement.  \
+On ne push jamais sur master directement.  \
+On merge develop dans master à chaque fin de sprint. Quand un livrable fonctionne sans bug \
+En cas de bug sur master, on crée une branche hotfix à partir de master, on corrige le bug et on merge dans master et develop. \
+
+### commandes git
+
+verifier la branch courante
+```bash
+git branch
+```
+creer une nouvelle branche
+```bash
+# de zero
+git checkout -b <branch_name>
+# a partir d'une branche existante (ex: creer une branche feature/random-forest a partir de develop)
+git checkout develop
+git checkout -b feature/random-forest
+```
+
+changer de branche
+```bash
+git checkout <branch_name>
+```
+merger une branche dans une autre (ex: merge feature/random-forest dans develop)
+```bash
+git checkout feature/random-forest
+git pull origin develop
+git checkout develop
+git merge feature/random-forest
+git push origin develop
+#supprimer la branche localement
+git branch -d feature-branch 
+#supprimer la branche sur le remote
+git push origin --delete feature-branch 
+```
+commiter sur une branche
+```bash
+git add .
+git commit -m "message"
+git push origin <branch_name>
+```
+
+
+
+
 
 Project Organization
 ------------
@@ -50,6 +123,75 @@ Project Organization
     │       └── visualize.py
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+
+Initialisation du projet
+------------
+
+
+### Docker
+
+1. Installer docker
+
+verifier que docker est installé
+```bash
+chmod +x ./checkDocker.sh
+./checkDocker.sh
+```
+Si ce n'est pas le cas, installer docker grace au commandes suivante
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null    
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+2. Lancer le container
+
+```bash
+chmod +x ./buildandrunDocker.sh
+./buildandrunDocker.sh
+```
+
+### Virtualenv
+
+0. Installer python 11.6
+
+```bash
+sudo apt-get install python3.11
+```
+
+1. Installer virtualenv
+
+```bash
+sudo apt install python3.11-venv
+```
+
+2. Créer un environnement virtuel
+
+```bash
+python3.11 -m venv env
+```
+
+3. Activer l'environnement virtuel
+
+```bash
+source env/bin/activate
+```
+
+4. Installer les dépendances
+
+```bash
+pip install -r requirements.txt
+```
+
+
+
 
 
 --------
