@@ -13,6 +13,16 @@ Rapport 	 /70 \
 ... Analyse des résultats \
 	 /20
 
+
+Données choisies
+------------
+Stellar Classification Dataset - SDSS17
+
+En astronomie, la classification stellaire est la classification des étoiles sur la base de leurs caractéristiques spectrales. Le système de classification des galaxies, des quasars et des étoiles est l'un des plus fondamentaux de l'astronomie. Le catalogage précoce des étoiles et de leur distribution dans le ciel a permis de comprendre qu'elles constituent notre propre galaxie et, suite à la distinction qu'Andromède était une galaxie séparée de la nôtre, de nombreuses galaxies ont commencé à être étudiées grâce à la construction de télescopes plus puissants. Ce datasat vise à classer les étoiles, les galaxies et les quasars en fonction de leurs caractéristiques spectrales.
+
+https://www.kaggle.com/datasets/fedesoriano/stellar-classification-dataset-sdss17/data
+
+
 Repo git organisation
 ------------
 
@@ -187,7 +197,7 @@ source env/bin/activate
 4. Installer les dépendances
 
 ```bash
-pip install -r requirements.txt
+pip install -e .
 ```
 
 
