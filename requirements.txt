@@ -13,6 +13,7 @@ numpy
 pandas
 matplotlib
 seaborn
+jupyter
 
 # test requirements
 pytest
