@@ -1,12 +1,10 @@
 #!/bin/bash
 
-docker --version &> /dev/null
-DOCKER_EXISTS=$?
+#check if docker is installed and print version
 
-if [ $DOCKER_EXISTS -ne 0 ]; then
-    echo "Docker is installed."
-    exit 0
+if [ -x "$(command -v docker)" ]; then
+    echo "Docker is installed"
+    docker --version
 else
-    echo "Docker is not installed."
-    exit 1
+    echo "Docker is not installed"
 fi
