@@ -1,0 +1,73 @@
+Todos : 
+    ☐ create the todo list @critical @started(23-11-21 14:31)
+    ☐ feature selection
+    ☐ gerer data imbalance
+    ☐ random forest
+    ☐ logistic regression
+    ☐ SVM
+    ☐ Neural Network 
+    ☐ Naive Bayes
+    ☐ KNN
+
+feature selection : 
+    ☐ feature scaling
+    ☐ check for redundant features (matrix correlation)
+    ☐ combien highlt correlated features with PCA/UMAP
+    ☐ choose for witch model to use feature selection :
+        - random forest
+        - logistic regression/SVM/neural network/Naive Bayes/KNN
+
+gerer data imbalance :
+    ☐ undersampling
+    ☐ oversampling (SMOTE)
+    ☐ pas gérer (avec et sans class_weight)
+
+random forest :
+    ☐ choose metrics (accuracy, precision, recall, f1, roc_auc)
+    ☐ hyperparameter tuning with gridsearch with crossvalidation (n_estimators, max_depth)
+    ☐ evaluate model with metrics
+    ☐ learning curve
+    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
+
+logistic regression : 
+    ☐ choose metrics
+    ☐ train with multimonial 
+    ☐ hyperparameter tuning with gridsearch with crossvalidation (C, penalty,solver)
+    ☐ evaluate model with metrics
+    ☐ learning curve
+    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
+
+SVM :
+    ☐ choix du kernel (linear, rbf, poly, sigmoid)
+    ☐ hyperparameter tuning with gridsearch with crossvalidation (C, gamma, degree) ajuster en fonction du kernel
+    ☐ evaluate model with metrics
+    ☐ learning curve
+    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
+
+Neural Network :
+    ☐ network architecture (input layer, hidden layers, output layer)
+    ☐ choose activation functions (relu, sigmoid, tanh, softmax)
+    ☐ choose optimizer (adam, sgd, rmsprop)
+    ☐ choose loss function (binary_crossentropy, categorical_crossentropy)
+    ☐ choose metrics (accuracy, f1)
+    ☐ train model (epochs, batch_size)
+    ☐ use validation set to avoid overfitting (dropout, early stopping)
+
+Naive Bayes :
+    ☐ choose type of naive bayes (gaussian, multinomial, bernoulli)
+    ☐ evaluate model with metrics
+    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
+
+KNN :
+    ☐ choose metrics
+    ☐ hyperparameter tuning with gridsearch with crossvalidation (n_neighbors, weights, p)
+    ☐ evaluate model with metrics
+    ☐ learning curve
+    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
+
+    
+
+
+
+
+
