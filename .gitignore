@@ -22,7 +22,10 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-
+# data directory
+data/external/*
+data/interim/*
+data/processed/*
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -85,3 +88,5 @@ target/
 
 # Mypy cache
 .mypy_cache/
+
+
