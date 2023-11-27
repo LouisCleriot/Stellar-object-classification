@@ -1,7 +1,7 @@
 Todos : 
     ✔ create the todo list @critical @started(23-11-21 14:31) @done(23-11-22 10:02) @lasted(19h31m30s)
     ☐ feature selection @started(23-11-22 10:03)
-    ☐ gerer data imbalance
+    ☐ gerer data imbalance @started(23-11-26 16:19)
     ☐ random forest
     ☐ logistic regression
     ☐ SVM
@@ -18,9 +18,9 @@ feature selection :
         - logistic regression/SVM/neural network/Naive Bayes/KNN
 
 gerer data imbalance :
-    ☐ undersampling
-    ☐ oversampling (SMOTE)
-    ☐ pas gérer (avec et sans class_weight)
+    ☐ undersampling @started(23-11-26 22:11)
+    ☐ oversampling (SMOTE) @started(23-11-26 21:20)
+    ✔ pas gérer (avec et sans class_weight) @done(23-11-26 21:20)
 
 random forest :
     ☐ choose metrics (accuracy, precision, recall, f1, roc_auc)
