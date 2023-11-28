@@ -14,6 +14,7 @@ pandas
 matplotlib
 seaborn
 jupyter
+scikit-learn-intelex
 
 # test requirements
 pytest
