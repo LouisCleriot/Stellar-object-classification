@@ -93,3 +93,28 @@ class DataProcessor :
         df_processed.dropna(inplace=True)
         return df_processed
 
+@click.command()
+@click.argument('reductor')
+def main(reductor):
+    """
+    Runs data processing scripts to turn raw data from (../raw) into
+    cleaned data ready to be analyzed (saved in ../processed).
+    """
+    data = pd.read_csv("data/raw/star_classification.csv")
+    data_processor = DataProcessor()
+    df_processed = data_processor.process_data(data)
+    df_processed.to_csv("data/processed/star_classification_processed_1.csv", index=False)
+
+    df_reducted = data_processor.feature_reduction(df_processed,reductor)
+    df_reducted.to_csv("data/processed/star_classification_processed_2.csv", index=False)
+
+    # Split the data for oversampling and undersampling
+    df_oversampled, df_undersampled = data_processor.balance_dataset(df_reducted)
+    # Save the other two datasets
+    df_oversampled.to_csv("data/processed/star_classification_oversampled.csv", index=False)
+    df_undersampled.to_csv("data/processed/star_classification_undersampled.csv", index=False)
+
+
+if __name__ == '__main__':
+    main()
+ 
