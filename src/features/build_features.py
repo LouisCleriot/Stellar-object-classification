@@ -46,10 +46,10 @@ class DataProcessor :
             self.scaler.fit(X)
         return self.scaler.transform(X)
     
-    def feature_selection(self,X):
-        # Remove features that are not useful
-        bad_features = ['obj_ID','run_ID','rerun_ID','cam_col','field_ID','spec_obj_ID','redshift','plate','MJD','fiber_ID']
-        return X.drop(bad_features, axis=1)
+    def feature_selection(self,X,features):
+        # Keep only the features that are in the list
+        X = X[features]
+        return X
 
     def feature_reduction(self,data,fit=False):
         """
@@ -90,8 +90,8 @@ class DataProcessor :
     
     def process_data(self,data,train=False):
         X,y = self.split_data(data) 
-        X = self.feature_selection(X)
-        features = ['alpha','delta','u','g','r','i','z']
+        features = ['alpha','delta','u','g','r','i','z','redshift']
+        X = self.feature_selection(X,features)
         # if data is for training, fit the scaler
         X = self.scale_data(X,fit=train)
         df_processed = pd.DataFrame(X, columns= features)
