@@ -23,7 +23,7 @@ gerer data imbalance :
     ☐ pas gérer (avec et sans class_weight)
 
 random forest :
-    ☐ choose metrics (accuracy, precision, recall, f1, roc_auc)
+    ✔ choose metrics (accuracy, precision, recall, f1, roc_auc) @done(23-11-27 07:51)
     ☐ hyperparameter tuning with gridsearch with crossvalidation (n_estimators, max_depth)
     ☐ evaluate model with metrics
     ☐ learning curve
