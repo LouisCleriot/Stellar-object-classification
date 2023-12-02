@@ -19,7 +19,7 @@ class Classifier :
         if search_type == 'grid':
             self.model = GridSearchCV(self.model,parameters,cv=cv)
         elif search_type == 'random':
-            self.model = RandomizedSearchCV(self.model,parameters,cv=cv)
+            self.model = RandomizedSearchCV(self.model,param_distributions=parameters,cv=cv,n_iter=150,random_state=0,n_jobs=-1,verbose=2,scoring='f1_score')
         self.train(X_train,y_train)
         self.best_params = self.model.best_params_
         self.model = self.model.best_estimator_

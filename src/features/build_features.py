@@ -69,6 +69,7 @@ class DataProcessor :
         # Add original data 
         df_reducted['alpha'] = X['alpha']
         df_reducted['delta'] = X['delta']
+        df_reducted['redshift'] = X['redshift']
         df_reducted['class'] = y
         df_reducted.dropna(inplace=True)
         return df_reducted
@@ -118,7 +119,7 @@ def main(reductor):
 
     # Reduce the dimension of the dataset (with fitting the reductor)
     df_reducted = data_processor.feature_reduction(df_processed,fit=True)
-    df_reducted.to_csv("data/processed/train__reducted.csv", index=False)
+    df_reducted.to_csv("data/processed/train_reducted.csv", index=False)
 
     logger.info('Balancing training data with oversampling and undersampling methods')
     # Make different kind of dataset with oversampling and undersampling methods
