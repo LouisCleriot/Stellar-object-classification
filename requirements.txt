@@ -16,6 +16,7 @@ seaborn
 jupyter
 imbalanced-learn
 umap-learn
+scikit-learn-intelex
 
 # test requirements
 pytest
