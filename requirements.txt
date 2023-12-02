@@ -16,6 +16,7 @@ matplotlib
 seaborn
 jupyter
 imbalanced-learn
+scikit-learn-intelex
 
 # test requirements
 pytest
