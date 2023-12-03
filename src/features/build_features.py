@@ -67,8 +67,6 @@ class DataProcessor :
         # Add the reducted features to the new dataset
         df_reducted = pd.DataFrame(X_reducted, columns=['reducted_1','reducted_2'])
         # Add original data 
-        df_reducted['alpha'] = X['alpha']
-        df_reducted['delta'] = X['delta']
         df_reducted['redshift'] = X['redshift']
         df_reducted['class'] = y
         df_reducted.dropna(inplace=True)
@@ -91,7 +89,7 @@ class DataProcessor :
     
     def process_data(self,data,train=False):
         X,y = self.split_data(data) 
-        features = ['alpha','delta','u','g','r','i','z','redshift']
+        features = ['u','g','r','i','z','redshift']
         X = self.feature_selection(X,features)
         # if data is for training, fit the scaler
         X = self.scale_data(X,fit=train)
