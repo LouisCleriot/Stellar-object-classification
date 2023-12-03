@@ -20,14 +20,19 @@ class Classifier :
         if search_type == 'grid':
             clf = GridSearchCV(self.model,parameters,cv=cv)
         elif search_type == 'random':
-            clf = RandomizedSearchCV(self.model,parameters,cv=cv,n_iter=10,random_state=0,n_jobs=-1,verbose=3,scoring='f1')
+            clf = RandomizedSearchCV(self.model,param_distributions=parameters,cv=cv,n_iter=10,random_state=0,scoring='f1_weighted')
+        print('Hyperparameter Tuning...')
         clf.fit(X_train,y_train)
+        print('Best Score: ',clf.best_score_)
         self.best_params = clf.best_params_
         self.model = clf.best_estimator_
 
     def evaluate(self,X_test,y_test):
         report = classification_report(y_test,self.predict(X_test))
         return report
+    
+    def visualize(self,X_test,y_test):
+        pass
 
     def save(self):
         dump(self.model, f'models/{self.name}.joblib')  

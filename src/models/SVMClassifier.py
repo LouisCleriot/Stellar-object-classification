@@ -1,5 +1,6 @@
 from src.models.classifier import Classifier
 from sklearn.svm import SVC
+import scipy 
 
 
 class SVMClassifier(Classifier):
@@ -11,9 +12,9 @@ class SVMClassifier(Classifier):
     
     def hyperparameter_tuning(self,X_train,y_train):
         parameters = {
-            'kernel':['linear'],
-            'C':[0.1,1,10,100],
-            'gamma':['scale', 'auto']
+            'C': scipy.stats.expon(scale=100),
+            'gamma': scipy.stats.expon(scale=.1),
+            'kernel': ['rbf','linear','poly','sigmoid'],
         }
         super().hyperparameter_tuning(X_train,y_train,parameters)
         
