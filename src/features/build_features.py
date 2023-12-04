@@ -10,14 +10,14 @@ import click
 import logging
 
 class Reductor :
-    def __init__(self,method='lda'):
+    def __init__(self,method='umap',n=2):
         self.name = method
         if method == 'lda':
             self.method = LDA(n_components=2)
         elif method == 'pca':
-            self.method = PCA(n_components=2)
+            self.method = PCA(n_components=n)
         else :
-            self.method = umap.UMAP(n_components=2)
+            self.method = umap.UMAP(n_components=n)
 
     def fit(self,X,y):
         if self.name == 'lda':
@@ -33,7 +33,8 @@ class DataProcessor :
 
     def __init__(self,reductor='lda'):
         self.scaler = RobustScaler()
-        self.reductor = Reductor(reductor)
+        self.reductor1 = Reductor(reductor,n=3)
+        self.reductor2 = Reductor(reductor,n=2)
         
 
     def split_data(self,data):
@@ -57,18 +58,26 @@ class DataProcessor :
         If fit is True, the reductor is fitted with the data. In this case,the data should be used for training only and not for testing.
         """
         X,y = self.split_data(data)
+
         # Transform the features that are highly correlated with dimension reduction
-        features_to_reduct = ['u','g','r','i','z']
-        X_to_reduct = X[features_to_reduct]
+        features_to_reduct_1 = ['u','g','z']
+        features_to_reduct_2 = ['r','i']
+        X1_to_reduct = X[features_to_reduct_1]
+        X2_to_reduct = X[features_to_reduct_2]
         if fit:
-            self.reductor.fit(X_to_reduct,y)
-        X_reducted = self.reductor.transform(X_to_reduct)
+            self.reductor1.fit(X1_to_reduct,y)
+            self.reductor2.fit(X2_to_reduct,y)
+        X1_reducted = self.reductor1.transform(X1_to_reduct)
+        X2_reducted = self.reductor2.transform(X2_to_reduct)
+
+        # Reconstruction of the dataframe
+        X_reducted = np.concatenate((X1_reducted,X2_reducted),axis=1)
 
         # Add the reducted features to the new dataset
-        df_reducted = pd.DataFrame(X_reducted, columns=['reducted_1','reducted_2'])
+        df_reducted = pd.DataFrame(X_reducted, columns=['ugz_1','ugz_2','ugz_3','ri_1','ri_2'])
+
         # Add original data 
-        df_reducted['alpha'] = X['alpha']
-        df_reducted['delta'] = X['delta']
+        df_reducted['redshift'] = X['redshift']
         df_reducted['class'] = y
         df_reducted.dropna(inplace=True)
         return df_reducted
@@ -90,11 +99,9 @@ class DataProcessor :
     
     def process_data(self,data,train=False):
         X,y = self.split_data(data) 
-        features = ['alpha','delta','u','g','r','i','z','redshift']
-        X = self.feature_selection(X,features)
         # if data is for training, fit the scaler
         X = self.scale_data(X,fit=train)
-        df_processed = pd.DataFrame(X, columns= features)
+        df_processed = pd.DataFrame(X, columns= data.drop(['class'], axis=1).columns)
         df_processed['class'] = y
         df_processed.dropna(inplace=True)
         return df_processed
@@ -118,7 +125,7 @@ def main(reductor):
 
     # Reduce the dimension of the dataset (with fitting the reductor)
     df_reducted = data_processor.feature_reduction(df_processed,fit=True)
-    df_reducted.to_csv("data/processed/train__reducted.csv", index=False)
+    df_reducted.to_csv("data/processed/train_reducted.csv", index=False)
 
     logger.info('Balancing training data with oversampling and undersampling methods')
     # Make different kind of dataset with oversampling and undersampling methods

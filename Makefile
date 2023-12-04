@@ -25,11 +25,12 @@ requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
 ## Make Dataset
-data: requirements
+data: 
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/interim
 
+## Build features
 features: 
-	$(PYTHON_INTERPRETER) src/features/build_features.py lda
+	$(PYTHON_INTERPRETER) src/features/build_features.py umap
 
 ## Delete all compiled Python files
 clean:
