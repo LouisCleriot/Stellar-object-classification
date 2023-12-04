@@ -6,8 +6,9 @@ from dotenv import find_dotenv, load_dotenv
 import pandas as pd
 import numpy as np
 from scipy import stats
-from sklearn.preprocessing import RobustScaler
-
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import LocalOutlierFactor as LOF
+import umap
 
 
 @click.command()
@@ -18,21 +19,22 @@ def main(input_filepath, output_filepath):
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
-    logger.info('making final data set from raw data')
+    logger.info('making train and test data sets from raw data')
     data = pd.read_csv(input_filepath+"/star_classification.csv")
-    #get rid of not use properties
-    data=data.drop(['obj_ID','run_ID','rerun_ID','cam_col','field_ID','spec_obj_ID','plate','MJD','fiber_ID'], axis=1)
-    #get rid of the outlier of u,g,z
-    data = data[data['g'] > -2000]
-    data = data[data['z'] > -2000]
-    data = data[data['u'] > -2000]
-    #scale the data
-    scaler = RobustScaler()
-    df_scaled = scaler.fit_transform(data.drop(['class'], axis=1))
-    df_scaled = pd.DataFrame(df_scaled, columns=data.columns[:-1])
-    df_scaled['class'] = data['class']
-    #save the data
-    df_scaled.to_csv(output_filepath+"/star_classification.csv", index=False)
+    #feature selection
+    data = data.drop(['obj_ID','run_ID','rerun_ID','cam_col','field_ID','plate','MJD','fiber_ID','spec_obj_ID','alpha','delta'], axis=1)
+    # Detection of outliers
+    reducer = umap.UMAP(set_op_mix_ratio=0.008).fit(data.drop('class', axis=1))
+    outliers_score = LOF(contamination=0.1).fit_predict(reducer.embedding_)
+    # Remove outliers
+    data = data[outliers_score == 1]
+    data = data.reset_index(drop=True)
+    # Split the data for training and testing
+    train, test = train_test_split(data, test_size=0.2, random_state=0)
+    logger.info(f'Saving the data in {output_filepath} folder')
+    # Save the data
+    train.to_csv(output_filepath+"/train.csv", index=False)
+    test.to_csv(output_filepath+"/test.csv", index=False)
     
 
 
