@@ -1,4 +1,4 @@
-from classifier import Classifier
+from src.models.Classifier import Classifier
 from sklearn.svm import SVC
 
 
@@ -8,4 +8,4 @@ class SVMClassifier(Classifier):
         super().__init__()
         self.name = 'SVM'
         self.model = SVC()
-        
+     
