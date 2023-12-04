@@ -1,7 +1,10 @@
 from joblib import dump, load
 from sklearn.model_selection import cross_val_score
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
+import matplotlib.pyplot as plt
+import seaborn as sns
+from src.helper import plot_roc_curve
 
 class Classifier :
     def __init__(self):
@@ -25,18 +28,25 @@ class Classifier :
         self.model = self.model.best_estimator_
 
     def evaluate(self,X,y):
-        pred = self.predict(X)
-        accuracy = accuracy_score(y,pred)
-        precision = precision_score(y,pred,average='weighted')
-        recall = recall_score(y,pred,average='weighted')
-        f1 = f1_score(y,pred,average='weighted')
-        return {'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}
+        #classification report
+        y_pred = self.predict(X)
+        print(classification_report(y, y_pred))
+        #confusion matrix
+        sns.set()
+        mat = confusion_matrix(y, y_pred)
+        sns.heatmap(mat.T, square=True, annot=True, fmt='d', cbar=False)
+        #roc curve
+        plot_roc_curve(self.model, X, y)
+        
 
-    def save(self):
-        dump(self.model, f'models/{self.name}.joblib')  
+    def save(self,new_name=None,path='../models/'):
+        if new_name == None:
+            dump(self.model, f'{path}{self.name}.joblib')  
+        else :
+            dump(self.model, f'{path}{new_name}.joblib')
 
-    def load(self):
-        self.model = load(f'models/{self.name}.joblib')
-
-
-    
+    def load(self,new_name=None,path='../models/'):
+        if new_name == None:
+            self.model = load(f'{path}{self.name}.joblib')
+        else :
+            self.model = load(f'{path}{new_name}.joblib')
