@@ -7,7 +7,8 @@ import umap
 import pandas as pd
 import numpy as np
 import click
-import logging
+#import logging
+from halo import Halo
 
 class Reductor :
     def __init__(self,method='umap',n=2):
@@ -18,7 +19,6 @@ class Reductor :
             self.method = PCA(n_components=n)
         else :
             self.method = umap.UMAP(n_components=n)
-
     def fit(self,X,y):
         if self.name == 'lda':
             self.method.fit(X,y)
@@ -65,10 +65,22 @@ class DataProcessor :
         X1_to_reduct = X[features_to_reduct_1]
         X2_to_reduct = X[features_to_reduct_2]
         if fit:
+            spinner = Halo(text='fitting u,g,z', spinner='dots')
+            spinner.start()
             self.reductor1.fit(X1_to_reduct,y)
+            spinner.succeed('u,g,z fitted')
+            spinner = Halo(text='fitting r,i', spinner='dots')
+            spinner.start()
             self.reductor2.fit(X2_to_reduct,y)
+            spinner.succeed('r,i fitted')
+        spinner = Halo(text='transforming u,g,z', spinner='dots')
+        spinner.start()
         X1_reducted = self.reductor1.transform(X1_to_reduct)
+        spinner.succeed('u,g,z transformed')
+        spinner = Halo(text='transforming r,i', spinner='dots')
+        spinner.start()
         X2_reducted = self.reductor2.transform(X2_to_reduct)
+        spinner.succeed('r,i transformed')
 
         # Reconstruction of the dataframe
         X_reducted = np.concatenate((X1_reducted,X2_reducted),axis=1)
@@ -113,28 +125,48 @@ def main(reductor):
     Runs data processing scripts to turn raw data from (../interim) into
     cleaned data ready to be analyzed (saved in ../processed).
     """
-    logger = logging.getLogger(__name__)
-    logger.info('Processing training data')
+    print("===========================================")
+    print("Processing data with {} reductor".format(reductor))
     # Load the data for training
+    spinner = Halo(text='Loading the data', spinner='dots')
+    spinner.start()
     train_data = pd.read_csv("data/interim/train.csv")
     r = Reductor(reductor)
     data_processor = DataProcessor(r)
+    spinner.succeed('Data Loaded')
     # Process the training data 
+    spinner = Halo(text='Scalling the data', spinner='dots')
+    spinner.start()
     df_processed = data_processor.process_data(train_data,train=True)
     df_processed.to_csv("data/processed/train_processed.csv", index=False)
+    spinner.succeed('Data Scaled')
+    print('scaled training data saved in data/processed/train_processed.csv')
+    print("===========================================")
 
+    
     # Reduce the dimension of the dataset (with fitting the reductor)
+    print("===========================================")
+    print("modifing u,g,z and ri to avoid high correlation between features")
+    
     df_reducted = data_processor.feature_reduction(df_processed,fit=True)
     df_reducted.to_csv("data/processed/train_reducted.csv", index=False)
+    print('scaled and uncorrelated training data saved in data/processed/train_reducted.csv')
+    print("===========================================")
 
-    logger.info('Balancing training data with oversampling and undersampling methods')
+    print("===========================================")
+    print('Balancing training data with oversampling and undersampling methods')
     # Make different kind of dataset with oversampling and undersampling methods
     df_oversampled, df_undersampled = data_processor.balance_dataset(df_reducted)
     # Save the other two datasets
     df_oversampled.to_csv("data/processed/train_oversampled.csv", index=False)
     df_undersampled.to_csv("data/processed/train_undersampled.csv", index=False)
-
-    logger.info('Processing testing data')
+    print('scaled, uncorellated, oversampled and undersampled training data saved in data/processed/train_oversampled.csv and data/processed/train_undersampled.csv')
+    print("===========================================")
+    
+    print("===========================================")
+    print('Processing testing data')
+    spinner = Halo(text='modifing test data with model of train data', spinner='dots')
+    spinner.start()
     # Load the data for testing
     test_data = pd.read_csv("data/interim/test.csv")
     # Process the testing data
@@ -143,12 +175,15 @@ def main(reductor):
     # Reduce the dimension of the dataset (without fitting the reductor)
     df_reducted = data_processor.feature_reduction(df_processed,fit=False)
     df_reducted.to_csv("data/processed/test_reducted.csv", index=False)
+    spinner.succeed('Test data processed')
+    print('test data saved in data/processed/test_processed.csv and data/processed/test_reducted.csv')
+    print("===========================================")
 
 
 
 if __name__ == '__main__':
-    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    logging.basicConfig(level=logging.INFO, format=log_fmt)
+    #log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    #logging.basicConfig(level=logging.INFO, format=log_fmt)
 
     main()
  
