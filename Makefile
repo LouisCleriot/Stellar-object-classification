@@ -8,6 +8,7 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROFILE = default
 PROJECT_NAME = projet-ift712
 PYTHON_INTERPRETER = python3
+MODEL = NaiveBayes
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
@@ -25,8 +26,16 @@ requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
 ## Make Dataset
-data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
+data: 
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/interim
+
+## Build features
+features: 
+	$(PYTHON_INTERPRETER) src/features/build_features.py umap
+
+## Train model
+train: 
+	$(PYTHON_INTERPRETER) src/models/train_model.py $(MODEL)
 
 ## Delete all compiled Python files
 clean:
