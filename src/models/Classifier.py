@@ -5,6 +5,7 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 import matplotlib.pyplot as plt
 import seaborn as sns
 from src.helper import plot_roc_curve
+import time
 
 class Classifier :
     def __init__(self):
@@ -29,7 +30,12 @@ class Classifier :
 
     def evaluate(self,X,y):
         #classification report
+        #calculte inference time
+        start_time = time.time()
         y_pred = self.predict(X)
+        end_time = time.time()
+        inference_time = (end_time - start_time)/len(y_pred)
+        print(f'Inference time : {inference_time} seconds')
         print(classification_report(y, y_pred))
         #confusion matrix
         sns.set()
