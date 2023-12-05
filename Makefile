@@ -8,7 +8,6 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROFILE = default
 PROJECT_NAME = projet-ift712
 PYTHON_INTERPRETER = python3
-MODEL = NaiveBayes
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
@@ -35,7 +34,7 @@ features:
 
 ## Train model
 train: 
-	$(PYTHON_INTERPRETER) src/models/train_model.py $(MODEL)
+	$(PYTHON_INTERPRETER) src/models/train_model.py  $(if $(MODEL),--model $(MODEL)) $(if $(DATA),--data $(DATA)) $(if $(NAME),--name $(NAME))
 
 ## Delete all compiled Python files
 clean:
