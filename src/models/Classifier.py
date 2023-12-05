@@ -19,11 +19,11 @@ class Classifier :
     def predict(self,X):
         return self.model.predict(X)
 
-    def hyperparameter_tuning(self,X_train,y_train,parameters,search_type='grid',cv=5,scoring='f1_macro'):
+    def hyperparameter_tuning(self,X_train,y_train,parameters,search_type='grid',cv=5,scoring='f1_macro',n_iteration=100):
         if search_type == 'grid':
             self.model = GridSearchCV(self.model,parameters,cv=cv,scoring=scoring)
         elif search_type == 'random':
-            self.model = RandomizedSearchCV(self.model,parameters,cv=cv,scoring=scoring)
+            self.model = RandomizedSearchCV(self.model,parameters,cv=cv,scoring=scoring,n_iter=n_iteration)
         self.train(X_train,y_train)
         self.best_params = self.model.best_params_
         self.model = self.model.best_estimator_
