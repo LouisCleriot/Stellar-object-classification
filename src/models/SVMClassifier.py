@@ -1,4 +1,4 @@
-from src.models.classifier import Classifier
+from src.models.Classifier import Classifier
 from sklearn.svm import SVC
 import scipy 
 
