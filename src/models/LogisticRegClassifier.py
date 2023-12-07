@@ -3,7 +3,7 @@ from sklearn.linear_model import LogisticRegression
 
 class LogisticRegClassifier(Classifier):
 
-    def __init__(self):
+    def __init__(self,name='LogisticRegression'):
         super().__init__()
-        self.name = 'LogisticRegression'
+        self.name = name
         self.model = LogisticRegression()

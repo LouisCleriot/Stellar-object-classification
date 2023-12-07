@@ -4,7 +4,7 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
 import matplotlib.pyplot as plt
 import seaborn as sns
-from src.helper import plot_roc_curve
+from src.helper import plot_roc_curve, display_umap2D
 import time
 
 class Classifier :
@@ -28,7 +28,7 @@ class Classifier :
         self.best_params = self.model.best_params_
         self.model = self.model.best_estimator_
 
-    def evaluate(self,X,y):
+    def evaluate(self,X_test,y_test):
         #classification report
         #calculte inference time
         start_time = time.time()
@@ -43,6 +43,10 @@ class Classifier :
         sns.heatmap(mat.T, square=True, annot=True, fmt='d', cbar=False)
         #roc curve
         plot_roc_curve(self.model, X, y)
+
+    def visualize_results(self,X_test,y_test):
+        y_pred = self.predict(X_test)
+        display_umap2D(X_test, y_test, y_pred, self.name)
         
 
     def save(self,new_name=None,path='../models/'):

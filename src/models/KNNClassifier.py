@@ -3,7 +3,7 @@ from sklearn.neighbors import KNeighborsClassifier
 
 class KNNClassifier(Classifier):
 
-    def __init__(self):
+    def __init__(self,name='KNN'):
         super().__init__()
-        self.name = 'KNN'
+        self.name = name
         self.model = KNeighborsClassifier()

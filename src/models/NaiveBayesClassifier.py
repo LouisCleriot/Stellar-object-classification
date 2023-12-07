@@ -6,9 +6,9 @@ from sklearn.preprocessing import MinMaxScaler
 
 class NaiveBayesClassifier(Classifier):
 
-    def __init__(self):
+    def __init__(self,name='NaiveBayes'):
         super().__init__()
-        self.name = 'NaiveBayes'
+        self.name = name
         self.model = GaussianNB()
     
     def hyperparameter_tuning(self, data, labels, parameters=None, search_type='grid', cv=5, scoring='f1_macro'):

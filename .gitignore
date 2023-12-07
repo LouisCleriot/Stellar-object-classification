@@ -26,6 +26,7 @@ var/
 data/external/*
 data/interim/*
 data/processed/*
+data/predictions/*
 
 # models directory
 models/*

@@ -36,6 +36,14 @@ features:
 train: 
 	$(PYTHON_INTERPRETER) src/models/train_model.py  $(if $(MODEL),--model $(MODEL)) $(if $(DATA),--data $(DATA)) $(if $(NAME),--name $(NAME))
 
+## Predict model
+predict:
+	$(PYTHON_INTERPRETER) src/models/predict_model.py  $(if $(MODEL),--model $(MODEL)) $(if $(DATA),--data $(DATA)) $(if $(NAME),-n $(NAME))
+
+## Visualize model
+visualize:
+	$(PYTHON_INTERPRETER) src/visualization/visualize.py  $(if $(MODEL),--model $(MODEL)) $(if $(DATA),--data $(DATA)) $(if $(NAME),-n $(NAME))
+
 ## Delete all compiled Python files
 clean:
 	find . -type f -name "*.py[co]" -delete
