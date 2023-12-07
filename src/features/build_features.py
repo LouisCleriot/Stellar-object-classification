@@ -1,6 +1,6 @@
 from sklearn.preprocessing import RobustScaler
 from imblearn.over_sampling import SMOTE
-from imblearn.under_sampling import ClusterCentroids
+from imblearn.under_sampling import RandomUnderSampler
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.decomposition import PCA
 import umap
@@ -76,7 +76,7 @@ class DataProcessor :
 
         spinner = Halo(text='undersampling the data', spinner='dots')
         spinner.start()
-        cc = ClusterCentroids(random_state=42)
+        cc = RandomUnderSampler(random_state=0)
         X_cc, y_cc = cc.fit_resample(X, y)
         df_undersampled = pd.DataFrame(X_cc, columns=data.columns[:-1])
         df_undersampled['class'] = y_cc
