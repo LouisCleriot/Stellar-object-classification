@@ -4,6 +4,7 @@ from sklearn.model_selection import HalvingRandomSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
+from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
