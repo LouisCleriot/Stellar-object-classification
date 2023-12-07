@@ -7,8 +7,8 @@ import umap
 import pandas as pd
 import numpy as np
 import click
-import logging
-
+#import logging
+from halo import Halo
 
 
 
@@ -44,8 +44,16 @@ class DataProcessor :
         """
         X,y = self.split_data(data)
         if fit :
+            spinner = Halo(text='fitting u,g,z,r,i features with pca', spinner='dots')
+            spinner.start()
             new_X = self.pca.fit(X)
+            spinner.succeed('features fitted')
+
+        # Transform data
+        spinner = Halo(text='transforming u,g,z,r,i features', spinner='dots')
+        spinner.start()
         new_X = self.pca.transform(X)
+        spinner.succeed('u,g,z,r,i transformed')
 
         # Add the reducted features to the new dataset
         df = pd.DataFrame(new_X, columns=['ugzri_1','ugzri_2','ugzri_3','ugzri_4','ugzri_5'])
@@ -77,25 +85,38 @@ def main():
     Runs data processing scripts to turn raw data from (../interim) into
     cleaned data ready to be analyzed (saved in ../processed).
     """
-    logger = logging.getLogger(__name__)
+
+    print("===========================================")
+    print("Processing data with scaling")
 
     # Load the data for training and testing
+    spinner = Halo(text='Loading the data', spinner='dots')
+    spinner.start()
     train_data = pd.read_csv("data/interim/train_without_outliers.csv")
     test_data = pd.read_csv("data/interim/test_without_outliers.csv")
+    spinner.succeed('Data Loaded')
 
     data_processor = DataProcessor()
 
     ## First dataset : only scaling
-    logger.info('Making first datasets : only scaling')
+    spinner = Halo(text='Scalling the data', spinner='dots')
+    spinner.start()
     # Process the training data 
     train_scaled = data_processor.scale_data(train_data,fit=True)
     train_scaled.to_csv("data/processed/train_scaled.csv", index=False)
     # Process the testing data
     test_scaled = data_processor.scale_data(test_data,fit=False)
     test_scaled.to_csv("data/processed/test_scaled.csv", index=False)
+    spinner.succeed('Data scaled')
+    print('scaled training data saved in data/processed/train_scaled.csv')
+    print('scaled testing data saved in data/processed/test_scaled.csv')
+    print("===========================================")
+
 
     ## Second dataset : scaling + removing correlation
-    logger.info('Making second datasets : scaling + removing correlation')
+    print("===========================================")
+    print("Apply PCA on u,g,z,r and i features to avoid high correlation between features")
+    
     # Apply PCA on u,g,z,r,i of train data (with fitting the reductor)
     train_pca = data_processor.remove_correlation(train_data,fit=True)
     train_pca = data_processor.scale_data(train_pca,fit=True)
@@ -105,20 +126,29 @@ def main():
     test_pca = data_processor.scale_data(test_pca,fit=False)
     test_pca.to_csv("data/processed/test_scaled_pca.csv", index=False)
 
+    print('scaled and uncorrelated training data saved in data/processed/train_scaled_pca.csv')
+    print('scaled and uncorrelated test data saved in data/processed/test_scaled_pca.csv')
+    print("===========================================")
+
+
     ## Third and Fourth dataset : scaling + removing correlation + SMOTE(oversampling) / ClusterCentroids(undersampling)
-    logger.info('Making third and fourth datasets : scaling + removing correlation + SMOTE(oversampling) / ClusterCentroids(undersampling)')
+    print("===========================================")
+    print('Balancing training data with oversampling and undersampling methods')
     # Make different kind of dataset with oversampling and undersampling methods
     df_oversampled, df_undersampled = data_processor.balance_dataset(train_pca)
     # Save the other two datasets
     df_oversampled.to_csv("data/processed/train_scaled_pca_oversampled.csv", index=False)
     df_undersampled.to_csv("data/processed/train_scaled_pca_undersampled.csv", index=False)
+    print('scaled, uncorellated, oversampled and undersampled training data saved in data/processed/train_oversampled.csv and data/processed/train_undersampled.csv')
+    print('scaled, uncorellated, oversampled and undersampled testing data saved in data/processed/test_oversampled.csv and data/processed/test_undersampled.csv')
+    print("===========================================")
 
 
 
 
 if __name__ == '__main__':
-    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    logging.basicConfig(level=logging.INFO, format=log_fmt)
+    #log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    #logging.basicConfig(level=logging.INFO, format=log_fmt)
 
     main()
  
