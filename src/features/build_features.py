@@ -66,15 +66,21 @@ class DataProcessor :
     def balance_dataset(self,data):
         X,y = self.split_data(data)
 
+        spinner = Halo(text='oversampling the data', spinner='dots')
+        spinner.start()
         sm = SMOTE(random_state=42)
         X_sm, y_sm = sm.fit_resample(X, y)
         df_oversampled = pd.DataFrame(X_sm, columns=data.columns[:-1])
         df_oversampled['class'] = y_sm
+        spinner.succeed('data oversampled')
 
+        spinner = Halo(text='undersampling the data', spinner='dots')
+        spinner.start()
         cc = ClusterCentroids(random_state=42)
         X_cc, y_cc = cc.fit_resample(X, y)
         df_undersampled = pd.DataFrame(X_cc, columns=data.columns[:-1])
         df_undersampled['class'] = y_cc
+        spinner.succeed('data undersampled')
 
         return df_oversampled, df_undersampled
     
