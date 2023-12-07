@@ -9,6 +9,7 @@ python-dotenv>=0.5.1
 
 # project requirements
 umap-learn
+umap-learn[plot]
 scikit-learn
 numpy
 pandas
