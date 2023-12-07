@@ -30,7 +30,7 @@ data:
 
 ## Build features
 features: 
-	$(PYTHON_INTERPRETER) src/features/build_features.py umap
+	$(PYTHON_INTERPRETER) src/features/build_features.py
 
 ## Train model
 train: 
