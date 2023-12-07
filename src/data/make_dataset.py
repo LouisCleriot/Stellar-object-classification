@@ -38,7 +38,7 @@ def main(input_filepath, output_filepath):
 
     # Feature selection
     data = data.drop(['obj_ID','run_ID','rerun_ID','cam_col','field_ID','plate','MJD','fiber_ID','spec_obj_ID','alpha','delta'], axis=1)
-    spinner.succeed('Dataset cleaned')
+    spinner.succeed('Dataset Cleaned')
 
     # Save train and test dataset before removing outliers
     spinner = Halo(text='Splitting and saving the data', spinner='pipe')
