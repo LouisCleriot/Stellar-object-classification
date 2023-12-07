@@ -7,6 +7,7 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import RobustScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 from src.helper import plot_roc_curve
@@ -24,8 +25,7 @@ class Classifier :
     def predict(self,X):
         return self.model.predict(X)
 
-    def hyperparameter_tuning(self,X_train,y_train,parameters,search_type='grid',cv=5,scoring='f1_macro',n_iteration=100):
-        
+    def hyperparameter_tuning(self, X_train, y_train, parameters, search_type='grid', cv=5, scoring='f1_macro', n_iteration=100):
         pipeline_steps = [
             ('preprocess', ColumnTransformer(
                 transformers=[
@@ -35,21 +35,21 @@ class Classifier :
             ('model', self.model)
         ]
         self.model = Pipeline(pipeline_steps)
+
+        # Update parameter keys for the pipeline
         parameters = {'model__' + key: value for key, value in parameters.items()}
-        
-        if pipeline_steps:
-            parameters = {'model__' + key: value for key, value in parameters.items()}
-            
+
         if search_type == 'grid':
-            self.model = GridSearchCV(self.model,parameters,cv=cv,scoring=scoring)
+            self.model = GridSearchCV(self.model, parameters, cv=cv, scoring=scoring)
         elif search_type == 'random':
-            self.model = RandomizedSearchCV(self.model,parameters,cv=cv,scoring=scoring)
+            self.model = RandomizedSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_iter=n_iteration)
         elif search_type == 'halving-random':
-            self.model = HalvingRandomSearchCV(estimator = self.model, param_distributions=parameters, cv=cv, scoring=scoring)
-        
-        self.train(X_train,y_train)
+            self.model = HalvingRandomSearchCV(estimator=self.model, param_distributions=parameters, cv=cv, scoring=scoring)
+
+        self.train(X_train, y_train)
         self.best_params = self.model.best_params_
         self.model = self.model.best_estimator_
+
 
     def evaluate(self,X,y):
         #classification report
