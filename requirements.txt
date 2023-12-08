@@ -18,6 +18,7 @@ seaborn
 jupyter
 imbalanced-learn
 scikit-learn-intelex
+halo
 
 # test requirements
 pytest
