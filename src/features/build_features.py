@@ -1,4 +1,4 @@
-from sklearn.preprocessing import RobustScaler
+from sklearn.preprocessing import RobustScaler, LabelEncoder
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
@@ -17,6 +17,7 @@ class DataProcessor :
     def __init__(self):
         self.scaler = RobustScaler()
         self.pca = PCA(n_components=5)
+        self.encoder = LabelEncoder()
         
     def split_data(self,data):
         X = data.drop(['class'], axis=1)
@@ -84,6 +85,17 @@ class DataProcessor :
 
         return df_oversampled, df_undersampled
     
+    def label_encoding(self,data,fit=False):
+        X,y = self.split_data(data)
+        # Encode the target variable
+        le = self.encoder
+        if fit:
+            le.fit(y)
+        y = le.transform(y)
+        df = pd.DataFrame(X, columns=X.columns)
+        df['class'] = y
+        return df
+    
 
 @click.command()
 def main():
@@ -103,6 +115,13 @@ def main():
     spinner.succeed('Data Loaded')
 
     data_processor = DataProcessor()
+
+    # ## Label encoding
+    # spinner = Halo(text='Encoding the target variable', spinner='dots')
+    # spinner.start()
+    # train_data = data_processor.label_encoding(train_data,fit=True)
+    # test_data = data_processor.label_encoding(test_data,fit=False)
+    # spinner.succeed('Target variable encoded')
 
     ## First dataset : only scaling
     spinner = Halo(text='Scalling the data', spinner='dots')
