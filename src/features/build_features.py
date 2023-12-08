@@ -105,8 +105,7 @@ def main():
     spinner.succeed('Data Loaded')
     train_data.to_csv("data/processed/train_with_outlier.csv", index=False)
     train_data_outlier.to_csv("data/processed/train_without_outlier.csv", index=False)
-    test_data.to_csv("data/processed/test_with_outlier.csv", index=False)
-    test_data_outlier.to_csv("data/processed/test_without_outlier.csv", index=False)
+    
     data_processor = DataProcessor()
 
     ## First dataset : only scaling
@@ -125,21 +124,22 @@ def main():
 
 
     # Second dataset : scaling + removing correlation
-    # print("===========================================")
-    # print("Apply PCA on u,g,z,r and i features to avoid high correlation between features")
-    
-    # Apply PCA on u,g,z,r,i of train data (with fitting the reductor)
-    # train_pca = data_processor.remove_correlation(train_data,fit=True)
-    # train_pca = data_processor.scale_data(train_pca,fit=True)
-    # train_pca.to_csv("data/processed/train_scaled_pca.csv", index=False)
-    # Apply PCA on test data (without fitting the reductor)
-    # test_pca = data_processor.remove_correlation(test_data,fit=False)
-    # test_pca = data_processor.scale_data(test_pca,fit=False)
-    # test_pca.to_csv("data/processed/test_scaled_pca.csv", index=False)
-
-    # print('scaled and uncorrelated training data saved in data/processed/train_scaled_pca.csv')
-    # print('scaled and uncorrelated test data saved in data/processed/test_scaled_pca.csv')
-    # print("===========================================")
+    print("===========================================")
+    print("Apply PCA on u,g,z,r and i features to avoid high correlation between features")    
+    train_pca = data_processor.remove_correlation(train_data,fit=True)
+    test_data = data_processor.remove_correlation(test_data,fit=False)
+    _ = data_processor.scale_data(train_pca,fit=True)
+    test_data = data_processor.scale_data(test_data,fit=False)
+    #Apply PCA on test data (without fitting the reductor)
+    train_pca = data_processor.remove_correlation(train_data_outlier,fit=True)
+    test_data_outlier = data_processor.remove_correlation(test_data_outlier,fit=False)
+    _ = data_processor.scale_data(train_pca,fit=True)
+    test_data_outlier = data_processor.scale_data(test_data_outlier,fit=False)
+    test_data.to_csv("data/processed/test_with_outlier.csv", index=False)
+    test_data_outlier.to_csv("data/processed/test_without_outlier.csv", index=False)
+    print('scaled and uncorrelated training data saved in data/processed/train_scaled_pca.csv')
+    print('scaled and uncorrelated test data saved in data/processed/test_scaled_pca.csv')
+    print("===========================================")
 
 
     ## Third and Fourth dataset : scaling + removing correlation + SMOTE(oversampling) / ClusterCentroids(undersampling)
