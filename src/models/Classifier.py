@@ -1,5 +1,6 @@
 from joblib import dump, load
 from sklearn.experimental import enable_halving_search_cv
+from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import HalvingRandomSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
@@ -30,7 +31,7 @@ class Classifier :
             ('preprocess', ColumnTransformer(
                 transformers=[
                     ('pca', PCA(n_components=5), make_column_selector(pattern='u|g|z|r|i')),
-                    ('scaler', RobustScaler(), make_column_selector(pattern='redshift'))
+                    ('scaler', RobustScaler(), make_column_selector(pattern='u|g|z|r|i|redshift'))
                 ])),
             ('model', self.model)
         ]
@@ -46,8 +47,7 @@ class Classifier :
             self.model = RandomizedSearchCV(self.model,parameters,cv=cv,scoring=scoring)
         elif search_type == 'halving-random':
             self.model = HalvingRandomSearchCV(estimator = self.model, param_distributions=parameters, cv=cv, scoring=scoring)
-        
-        self.train(X_train,y_train)
+
         self.best_params = self.model.best_params_
         self.model = self.model.best_estimator_
 
