@@ -110,10 +110,15 @@ def main():
     # Load the data for training and testing
     spinner = Halo(text='Loading the data', spinner='dots')
     spinner.start()
-    train_data = pd.read_csv("data/interim/train_without_outliers.csv")
-    test_data = pd.read_csv("data/interim/test_without_outliers.csv")
+    train_data_outlier = pd.read_csv("data/interim/train_without_outliers.csv")
+    test_data_outlier = pd.read_csv("data/interim/test_without_outliers.csv")
+    train_data = pd.read_csv("data/interim/train_with_outliers.csv")
+    test_data = pd.read_csv("data/interim/test_with_outliers.csv")
     spinner.succeed('Data Loaded')
-
+    train_data.to_csv("data/processed/train_with_outlier.csv", index=False)
+    train_data_outlier.to_csv("data/processed/train_without_outlier.csv", index=False)
+    test_data.to_csv("data/processed/test_with_outlier.csv", index=False)
+    test_data_outlier.to_csv("data/processed/test_without_outlier.csv", index=False)
     data_processor = DataProcessor()
 
     # ## Label encoding
@@ -124,48 +129,51 @@ def main():
     # spinner.succeed('Target variable encoded')
 
     ## First dataset : only scaling
-    spinner = Halo(text='Scalling the data', spinner='dots')
-    spinner.start()
+    #spinner = Halo(text='Scalling the data', spinner='dots')
+    #spinner.start()
     # Process the training data 
-    train_scaled = data_processor.scale_data(train_data,fit=True)
-    train_scaled.to_csv("data/processed/train_scaled.csv", index=False)
+    #train_scaled = data_processor.scale_data(train_data,fit=True)
+    #train_scaled.to_csv("data/processed/train_scaled.csv", index=False)
     # Process the testing data
-    test_scaled = data_processor.scale_data(test_data,fit=False)
-    test_scaled.to_csv("data/processed/test_scaled.csv", index=False)
-    spinner.succeed('Data scaled')
-    print('scaled training data saved in data/processed/train_scaled.csv')
-    print('scaled testing data saved in data/processed/test_scaled.csv')
+    #test_scaled = data_processor.scale_data(test_data,fit=False)
+    #test_scaled.to_csv("data/processed/test_scaled.csv", index=False)
+    #spinner.succeed('Data scaled')
+    #print('scaled training data saved in data/processed/train_scaled.csv')
+    ##print('scaled testing data saved in data/processed/test_scaled.csv')
     print("===========================================")
 
 
-    ## Second dataset : scaling + removing correlation
-    print("===========================================")
-    print("Apply PCA on u,g,z,r and i features to avoid high correlation between features")
+    # Second dataset : scaling + removing correlation
+    # print("===========================================")
+    # print("Apply PCA on u,g,z,r and i features to avoid high correlation between features")
     
     # Apply PCA on u,g,z,r,i of train data (with fitting the reductor)
-    train_pca = data_processor.remove_correlation(train_data,fit=True)
-    train_pca = data_processor.scale_data(train_pca,fit=True)
-    train_pca.to_csv("data/processed/train_scaled_pca.csv", index=False)
+    # train_pca = data_processor.remove_correlation(train_data,fit=True)
+    # train_pca = data_processor.scale_data(train_pca,fit=True)
+    # train_pca.to_csv("data/processed/train_scaled_pca.csv", index=False)
     # Apply PCA on test data (without fitting the reductor)
-    test_pca = data_processor.remove_correlation(test_data,fit=False)
-    test_pca = data_processor.scale_data(test_pca,fit=False)
-    test_pca.to_csv("data/processed/test_scaled_pca.csv", index=False)
+    # test_pca = data_processor.remove_correlation(test_data,fit=False)
+    # test_pca = data_processor.scale_data(test_pca,fit=False)
+    # test_pca.to_csv("data/processed/test_scaled_pca.csv", index=False)
 
-    print('scaled and uncorrelated training data saved in data/processed/train_scaled_pca.csv')
-    print('scaled and uncorrelated test data saved in data/processed/test_scaled_pca.csv')
-    print("===========================================")
+    # print('scaled and uncorrelated training data saved in data/processed/train_scaled_pca.csv')
+    # print('scaled and uncorrelated test data saved in data/processed/test_scaled_pca.csv')
+    # print("===========================================")
 
 
     ## Third and Fourth dataset : scaling + removing correlation + SMOTE(oversampling) / ClusterCentroids(undersampling)
     print("===========================================")
     print('Balancing training data with oversampling and undersampling methods')
     # Make different kind of dataset with oversampling and undersampling methods
-    df_oversampled, df_undersampled = data_processor.balance_dataset(train_pca)
+    df_oversampled_outlier, df_undersampled_outlier = data_processor.balance_dataset(train_data_outlier)
+    df_oversampled, df_undersampled = data_processor.balance_dataset(train_data)
     # Save the other two datasets
-    df_oversampled.to_csv("data/processed/train_scaled_pca_oversampled.csv", index=False)
-    df_undersampled.to_csv("data/processed/train_scaled_pca_undersampled.csv", index=False)
-    print('scaled, uncorellated, oversampled and undersampled training data saved in data/processed/train_oversampled.csv and data/processed/train_undersampled.csv')
-    print('scaled, uncorellated, oversampled and undersampled testing data saved in data/processed/test_oversampled.csv and data/processed/test_undersampled.csv')
+    df_oversampled.to_csv("data/processed/train_with_outlier_oversample.csv", index=False)
+    df_undersampled.to_csv("data/processed/train_with_outlier_undersampled.csv", index=False)
+    df_oversampled_outlier.to_csv("data/processed/train_without_outlier_oversample.csv", index=False)
+    df_undersampled_outlier.to_csv("data/processed/train_without_outlier_undersampled.csv", index=False)
+    print('dataset with outlier, oversampled and undersampled saved in data/processed/train_with_outlier_oversampled.csv and data/processed/train_with_outlier_undersampled.csv')
+    print('dataset without outlier, oversampled and undersampled saved in data/processed/train_without_outlier_oversampled.csv and data/processed/train_without_outlier_undersampled.csv')
     print("===========================================")
 
 
