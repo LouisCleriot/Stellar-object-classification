@@ -30,7 +30,7 @@ class Classifier :
             ('preprocess', ColumnTransformer(
                 transformers=[
                     ('pca', PCA(n_components=5), make_column_selector(pattern='u|g|z|r|i')),
-                    ('scaler', RobustScaler(), make_column_selector(pattern='redshift'))
+                    ('scaler', RobustScaler(), make_column_selector(pattern='u|g|z|r|i|redshift'))
                 ])),
             ('model', self.model)
         ]
@@ -44,7 +44,7 @@ class Classifier :
         elif search_type == 'random':
             self.model = RandomizedSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_iter=n_iteration)
         elif search_type == 'halving-random':
-            self.model = HalvingRandomSearchCV(estimator=self.model, param_distributions=parameters, cv=cv, scoring=scoring)
+            self.model = HalvingRandomSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_jobs=-1, n_candidates='exhaust', factor=4, resource='n_samples', min_resources='smallest', aggressive_elimination=False, random_state=42)
 
         self.train(X_train, y_train)
         self.best_params = self.model.best_params_
