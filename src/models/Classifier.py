@@ -45,9 +45,9 @@ class Classifier :
         elif search_type == 'random':
             self.model = RandomizedSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_iter=n_iteration)
         elif search_type == 'halving-random':
-            self.model = HalvingRandomSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_jobs=-1, n_candidates='exhaust', factor=4, resource='n_samples', min_resources='smallest', aggressive_elimination=False, random_state=42)
+            self.model = HalvingRandomSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_candidates='exhaust',n_jobs= -1, factor=4, resource='n_samples', min_resources='smallest', aggressive_elimination=False, random_state=0)
 
-
+        self.model.fit(X_train, y_train)
         self.best_params = self.model.best_params_
         self.model = self.model.best_estimator_
 
