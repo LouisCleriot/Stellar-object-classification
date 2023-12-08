@@ -7,6 +7,7 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import RobustScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 from src.helper import plot_roc_curve
