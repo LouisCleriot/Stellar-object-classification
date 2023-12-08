@@ -1,0 +1,31 @@
+Inference time : 3.738146358066135e-05 seconds
+              precision    recall  f1-score   support
+
+           0       0.98      0.98      0.98     10802
+           1       0.93      0.94      0.93      3429
+           2       0.99      1.00      1.00      3769
+
+    accuracy                           0.97     18000
+   macro avg       0.97      0.97      0.97     18000
+weighted avg       0.97      0.97      0.97     18000
+
+auc score for class 0:  0.9931936402647178
+auc score for class 1:  0.9905072574413089
+auc score for class 2:  0.9995431667521151
+
+
+
+Inference time : 2.184205585055881e-06 seconds
+              precision    recall  f1-score   support
+
+           0       0.98      0.97      0.98     10802
+           1       0.92      0.94      0.93      3429
+           2       0.99      1.00      1.00      3769
+
+    accuracy                           0.97     18000
+   macro avg       0.97      0.97      0.97     18000
+weighted avg       0.97      0.97      0.97     18000
+
+auc score for class 0:  0.9925314840124849
+auc score for class 1:  0.9889409083855825
+auc score for class 2:  0.9995413769307954
