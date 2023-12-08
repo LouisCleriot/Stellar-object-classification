@@ -18,24 +18,24 @@ class NaiveBayesClassifier(Classifier):
         models = [GaussianNB(), MultinomialNB(), ComplementNB(), BernoulliNB(), CategoricalNB()]
         best_score = 0
         best_model = None
-        X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=42)
+        X_train, X_val, y_train, y_val = train_test_split(data, labels, test_size=0.2, random_state=0)
         scaler = MinMaxScaler().fit(X_train)
         X_train_no_negatif = scaler.transform(X_train)
-        X_test_no_negatif = scaler.transform(X_test)
+        X_val_no_negatif = scaler.transform(X_val)
         if isinstance(labels[0], str):
             print('Labels are strings, we will encode them \n')
             le = LabelEncoder().fit(y_train)
             y_train = le.transform(y_train)
-            y_test = le.transform(y_test)
+            y_val = le.transform(y_val)
             
         for model in models:
             if isinstance(model, GaussianNB) or isinstance(model, BernoulliNB):
                 model.fit(X_train, y_train)
-                score = model.score(X_test, y_test)
+                score = model.score(X_val, y_val)
             else:
                 print(f'Training {model} with no negative values \n')
                 model.fit(X_train_no_negatif, y_train)
-                score = model.score(X_test_no_negatif, y_test)
+                score = model.score(X_val_no_negatif, y_val)
             print(f'{model} has score {score} \n')
             if score > best_score:
                 best_score = score
