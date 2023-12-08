@@ -44,16 +44,10 @@ class DataProcessor :
         """
         X,y = self.split_data(data)
         if fit :
-            spinner = Halo(text='fitting u,g,z,r,i features with pca', spinner='dots')
-            spinner.start()
             new_X = self.pca.fit(X)
-            spinner.succeed('features fitted')
 
         # Transform data
-        spinner = Halo(text='transforming u,g,z,r,i features', spinner='dots')
-        spinner.start()
         new_X = self.pca.transform(X)
-        spinner.succeed('u,g,z,r,i transformed')
 
         # Add the reducted features to the new dataset
         df = pd.DataFrame(new_X, columns=['ugzri_1','ugzri_2','ugzri_3','ugzri_4','ugzri_5'])
@@ -70,7 +64,7 @@ class DataProcessor :
         spinner.start()
         sm = SMOTE(random_state=42)
         X_sm, y_sm = sm.fit_resample(X, y)
-        df_oversampled = pd.DataFrame(X_sm, columns=data.columns[:-1])
+        df_oversampled = pd.DataFrame(X_sm, columns=X.columns)
         df_oversampled['class'] = y_sm
         spinner.succeed('data oversampled')
 
@@ -78,7 +72,7 @@ class DataProcessor :
         spinner.start()
         cc = RandomUnderSampler(random_state=0)
         X_cc, y_cc = cc.fit_resample(X, y)
-        df_undersampled = pd.DataFrame(X_cc, columns=data.columns[:-1])
+        df_undersampled = pd.DataFrame(X_cc, columns=X.columns)
         df_undersampled['class'] = y_cc
         spinner.succeed('data undersampled')
 
@@ -105,9 +99,87 @@ def main():
     spinner.succeed('Data Loaded')
     train_data.to_csv("data/processed/train_with_outlier.csv", index=False)
     train_data_outlier.to_csv("data/processed/train_without_outlier.csv", index=False)
-    test_data.to_csv("data/processed/test_with_outlier.csv", index=False)
-    test_data_outlier.to_csv("data/processed/test_without_outlier.csv", index=False)
+    
     data_processor = DataProcessor()
+    
+    print("===========================================")
+    print('Balancing training data with oversampling and undersampling methods')
+    # Make different kind of dataset with oversampling and undersampling methods
+    spinner = Halo(text='balancing dataset without outliers', spinner='dots')
+    spinner.start()
+    df_oversampled_outlier, df_undersampled_outlier = data_processor.balance_dataset(train_data_outlier)
+    spinner.succeed('training data without outliers balanced')
+    spinner = Halo(text='balancing dataset with outliers', spinner='dots')
+    spinner.start()
+    df_oversampled, df_undersampled = data_processor.balance_dataset(train_data)
+    spinner.succeed('training data with outliers balanced')
+    spinner = Halo(text='saving all training dataset', spinner='dots')
+    spinner.start()
+    df_oversampled.to_csv("data/processed/train_with_outlier_oversample.csv", index=False)
+    df_undersampled.to_csv("data/processed/train_with_outlier_undersampled.csv", index=False)
+    df_oversampled_outlier.to_csv("data/processed/train_without_outlier_oversample.csv", index=False)
+    df_undersampled_outlier.to_csv("data/processed/train_without_outlier_undersampled.csv", index=False)
+    spinner.succeed('all training dataset saved')
+    print("training data balanced")
+    print("===========================================")
+    
+    
+    print("===========================================")
+    print("Feating scaling and PCA on test dataset")
+    spinner = Halo(text='feature engineering of test data with outliers', spinner='dots')
+    spinner.start()
+    train_pca = data_processor.remove_correlation(train_data,fit=True)
+    train_scaler = data_processor.scale_data(train_pca,fit=True)
+    test_data_c = data_processor.remove_correlation(test_data,fit=False)
+    test_data_c = data_processor.scale_data(test_data_c,fit=False)
+    test_data_c.to_csv("data/processed/test_with_outlier.csv", index=False)
+    spinner.succeed('test data with outliers processed and saved')
+    
+    spinner = Halo(text='feature engineering of test data without outliers', spinner='dots')
+    spinner.start()
+    train_pca_outlier = data_processor.remove_correlation(train_data_outlier,fit=True)
+    train_scaler_outlier = data_processor.scale_data(train_pca_outlier,fit=True)
+    test_data_outlier_c = data_processor.remove_correlation(test_data_outlier,fit=False)
+    test_data_outlier_c = data_processor.scale_data(test_data_outlier_c,fit=False)
+    test_data_outlier_c.to_csv("data/processed/test_without_outlier.csv", index=False)
+    spinner.succeed('test data without outliers processed and saved')
+    
+    spinner = Halo(text='feature engineering of test data with outliers oversampled', spinner='dots')
+    spinner.start()
+    df_pca_oversampled_outlier = data_processor.remove_correlation(df_oversampled_outlier,fit=True)
+    train_scaler_oversampled_outlier = data_processor.scale_data(df_pca_oversampled_outlier,fit=True)
+    
+    test_data_oversampled_outlier = data_processor.remove_correlation(test_data_outlier,fit=False)
+    test_data_oversampled_outlier = data_processor.scale_data(test_data_oversampled_outlier,fit=False)
+    test_data_oversampled_outlier.to_csv("data/processed/test_without_outlier_oversampled.csv", index=False)
+    spinner.succeed('test data with outliers oversampled processed and saved')
+    
+    spinner = Halo(text='feature engineering of test data with outliers undersampled', spinner='dots')
+    spinner.start()
+    df_pca_undersampled_outlier = data_processor.remove_correlation(df_undersampled_outlier,fit=True)
+    train_scaler_undersampled_outlier = data_processor.scale_data(df_pca_undersampled_outlier,fit=True)
+    test_data_undersampled_outlier = data_processor.remove_correlation(test_data_outlier,fit=False)
+    test_data_undersampled_outlier = data_processor.scale_data(test_data_undersampled_outlier,fit=False)
+    test_data_undersampled_outlier.to_csv("data/processed/test_without_outlier_undersampled.csv", index=False)
+    spinner.succeed('test data with outliers undersampled processed and saved')
+    
+    spinner = Halo(text='feature engineering of test data without outliers oversampled', spinner='dots')
+    spinner.start()
+    df_pca_oversampled = data_processor.remove_correlation(df_oversampled,fit=True)
+    train_scaler_oversampled = data_processor.scale_data(df_pca_oversampled,fit=True)
+    test_data_oversampled = data_processor.remove_correlation(test_data,fit=False)
+    test_data_oversampled = data_processor.scale_data(test_data_oversampled,fit=False)
+    test_data_oversampled.to_csv("data/processed/test_with_outlier_oversampled.csv", index=False)
+    spinner.succeed('test data without outliers oversampled processed and saved')
+    
+    spinner = Halo(text='feature engineering of test data without outliers undersampled', spinner='dots')
+    spinner.start()
+    df_pca_undersampled = data_processor.remove_correlation(df_undersampled,fit=True)
+    train_scaler_undersampled = data_processor.scale_data(df_pca_undersampled,fit=True)
+    test_data_undersampled = data_processor.remove_correlation(test_data,fit=False)
+    test_data_undersampled = data_processor.scale_data(test_data_undersampled,fit=False)
+    test_data_undersampled.to_csv("data/processed/test_with_outlier_undersampled.csv", index=False)
+    spinner.succeed('test data without outliers undersampled processed and saved')
 
     ## First dataset : only scaling
     #spinner = Halo(text='Scalling the data', spinner='dots')
@@ -121,43 +193,6 @@ def main():
     #spinner.succeed('Data scaled')
     #print('scaled training data saved in data/processed/train_scaled.csv')
     ##print('scaled testing data saved in data/processed/test_scaled.csv')
-    print("===========================================")
-
-
-    # Second dataset : scaling + removing correlation
-    # print("===========================================")
-    # print("Apply PCA on u,g,z,r and i features to avoid high correlation between features")
-    
-    # Apply PCA on u,g,z,r,i of train data (with fitting the reductor)
-    # train_pca = data_processor.remove_correlation(train_data,fit=True)
-    # train_pca = data_processor.scale_data(train_pca,fit=True)
-    # train_pca.to_csv("data/processed/train_scaled_pca.csv", index=False)
-    # Apply PCA on test data (without fitting the reductor)
-    # test_pca = data_processor.remove_correlation(test_data,fit=False)
-    # test_pca = data_processor.scale_data(test_pca,fit=False)
-    # test_pca.to_csv("data/processed/test_scaled_pca.csv", index=False)
-
-    # print('scaled and uncorrelated training data saved in data/processed/train_scaled_pca.csv')
-    # print('scaled and uncorrelated test data saved in data/processed/test_scaled_pca.csv')
-    # print("===========================================")
-
-
-    ## Third and Fourth dataset : scaling + removing correlation + SMOTE(oversampling) / ClusterCentroids(undersampling)
-    print("===========================================")
-    print('Balancing training data with oversampling and undersampling methods')
-    # Make different kind of dataset with oversampling and undersampling methods
-    df_oversampled_outlier, df_undersampled_outlier = data_processor.balance_dataset(train_data_outlier)
-    df_oversampled, df_undersampled = data_processor.balance_dataset(train_data)
-    # Save the other two datasets
-    df_oversampled.to_csv("data/processed/train_with_outlier_oversample.csv", index=False)
-    df_undersampled.to_csv("data/processed/train_with_outlier_undersampled.csv", index=False)
-    df_oversampled_outlier.to_csv("data/processed/train_without_outlier_oversample.csv", index=False)
-    df_undersampled_outlier.to_csv("data/processed/train_without_outlier_undersampled.csv", index=False)
-    print('dataset with outlier, oversampled and undersampled saved in data/processed/train_with_outlier_oversampled.csv and data/processed/train_with_outlier_undersampled.csv')
-    print('dataset without outlier, oversampled and undersampled saved in data/processed/train_without_outlier_oversampled.csv and data/processed/train_without_outlier_undersampled.csv')
-    print("===========================================")
-
-
 
 
 if __name__ == '__main__':
