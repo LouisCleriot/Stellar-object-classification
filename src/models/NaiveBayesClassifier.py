@@ -3,6 +3,12 @@ from sklearn.naive_bayes import GaussianNB, MultinomialNB, ComplementNB, Bernoul
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler 
+from sklearn.compose import ColumnTransformer, make_column_selector
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import RobustScaler,MinMaxScaler, FunctionTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import f1_score
+import numpy as np
 
 class NaiveBayesClassifier(Classifier):
 
@@ -10,36 +16,51 @@ class NaiveBayesClassifier(Classifier):
         super().__init__()
         self.name = 'NaiveBayes'
         self.model = GaussianNB()
+        self.best_score = -np.inf
+        self.best_params = None
+        self.best_model = None
     
-    def hyperparameter_tuning(self, data, labels, parameters=None, search_type='grid', cv=5, scoring='f1_macro'):
+    def hyperparameter_tuning(self, data, labels, parameters=None, search_type='grid', cv=5, scoring='macro'):
         if parameters != None:
             print('NaiveBayes does not have hyperparameters to tune \n')
         print('We will test wich bayes classifier is better: GaussianNB, MultinomialNB, ComplementNB, BernouilliNB and CategoricalNB \n')
         models = [GaussianNB(), MultinomialNB(), ComplementNB(), BernoulliNB(), CategoricalNB()]
-        best_score = 0
-        best_model = None
-        X_train, X_val, y_train, y_val = train_test_split(data, labels, test_size=0.2, random_state=0)
-        scaler = MinMaxScaler().fit(X_train)
-        X_train_no_negatif = scaler.transform(X_train)
-        X_val_no_negatif = scaler.transform(X_val)
-        if isinstance(labels[0], str):
-            print('Labels are strings, we will encode them \n')
-            le = LabelEncoder().fit(y_train)
-            y_train = le.transform(y_train)
-            y_val = le.transform(y_val)
-            
+        rng = np.random.RandomState(0)
+        X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=rng)
         for model in models:
-            if isinstance(model, GaussianNB) or isinstance(model, BernoulliNB):
-                model.fit(X_train, y_train)
-                score = model.score(X_val, y_val)
-            else:
-                print(f'Training {model} with no negative values \n')
-                model.fit(X_train_no_negatif, y_train)
-                score = model.score(X_val_no_negatif, y_val)
-            print(f'{model} has score {score} \n')
-            if score > best_score:
-                best_score = score
-                best_model = model
+            pipeline_steps = [
+                ('preprocess', ColumnTransformer(
+                    transformers=[
+                        ('pca_step', PCA(n_components=5), make_column_selector(pattern='u|g|z|r|i')),
+                        ('redshift_step', FunctionTransformer() , make_column_selector(pattern='redshift'))
+                    ])),
+                ('scaler', MinMaxScaler()),
+                ('model', model)
+            ]
+            self.model = Pipeline(pipeline_steps)
+
+            self.model.fit(X_train, y_train)
+            y_pred = self.predict(X_test)
+            score = f1_score(y_test, y_pred, average=scoring)
+
+            if score > self.best_score:
+                self.best_score = score
+                self.best_model = self.model
+        self.model = self.best_model
+        self.model.fit(data, labels)
+        print(f'The best model is {self.model} with a score of {self.best_score} \n')
+        
+    def train(self, data, labels):
+        pipeline_steps = [
+                ('preprocess', ColumnTransformer(
+                    transformers=[
+                        ('pca_step', PCA(n_components=5), make_column_selector(pattern='u|g|z|r|i')),
+                        ('redshift_step', FunctionTransformer() , make_column_selector(pattern='redshift'))
+                    ])),
+                ('scaler', RobustScaler()),
+                ('model', self.model)
+            ]
+        self.model = Pipeline(pipeline_steps)
+        self.model.fit(data, labels) 
+
                 
-        self.model = best_model
-        print(f'Best model is {best_model} with score {best_score}, instance has been updated \n')        

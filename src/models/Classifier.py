@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import RobustScaler
+from sklearn.preprocessing import RobustScaler, MinMaxScaler, FunctionTransformer
 import matplotlib.pyplot as plt
 import seaborn as sns
 from src.helper import plot_roc_curve
@@ -29,13 +29,14 @@ class Classifier :
     def hyperparameter_tuning(self, X_train, y_train, parameters, search_type='grid', cv=5, scoring='f1_macro', n_iteration=100):
         rng = np.random.RandomState(0)
         pipeline_steps = [
-            ('preprocess', ColumnTransformer(
-                transformers=[
-                    ('pca', PCA(n_components=5), make_column_selector(pattern='u|g|z|r|i')),
-                    ('scaler', RobustScaler(), make_column_selector(pattern='u|g|z|r|i|redshift'))
-                ])),
-            ('model', self.model)
-        ]
+                ('preprocess', ColumnTransformer(
+                    transformers=[
+                        ('pca_step', PCA(n_components=5), make_column_selector(pattern='u|g|z|r|i')),
+                        ('redshift_step', FunctionTransformer() , make_column_selector(pattern='redshift'))
+                    ])),
+                ('scaler', RobustScaler()),
+                ('model', self.model)
+            ]
         self.model = Pipeline(pipeline_steps)
 
         # Update parameter keys for the pipeline
