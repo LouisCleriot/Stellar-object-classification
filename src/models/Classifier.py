@@ -8,11 +8,12 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import RobustScaler
+from sklearn.preprocessing import RobustScaler, MinMaxScaler, FunctionTransformer
 import matplotlib.pyplot as plt
 import seaborn as sns
 from src.helper import plot_roc_curve
 import time
+import numpy as np
 
 class Classifier :
     def __init__(self):
@@ -27,14 +28,16 @@ class Classifier :
         return self.model.predict(X)
 
     def hyperparameter_tuning(self, X_train, y_train, parameters, search_type='grid', cv=5, scoring='f1_macro', n_iteration=100):
+        rng = np.random.RandomState(0)
         pipeline_steps = [
-            ('preprocess', ColumnTransformer(
-                transformers=[
-                    ('pca', PCA(n_components=5), make_column_selector(pattern='u|g|z|r|i')),
-                    ('scaler', RobustScaler(), make_column_selector(pattern='u|g|z|r|i|redshift'))
-                ])),
-            ('model', self.model)
-        ]
+                ('preprocess', ColumnTransformer(
+                    transformers=[
+                        ('pca_step', PCA(n_components=5), make_column_selector(pattern='u|g|z|r|i')),
+                        ('redshift_step', FunctionTransformer() , make_column_selector(pattern='redshift'))
+                    ])),
+                ('scaler', RobustScaler()),
+                ('model', self.model)
+            ]
         self.model = Pipeline(pipeline_steps)
 
         # Update parameter keys for the pipeline
@@ -45,7 +48,7 @@ class Classifier :
         elif search_type == 'random':
             self.model = RandomizedSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_iter=n_iteration)
         elif search_type == 'halving-random':
-            self.model = HalvingRandomSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_candidates='exhaust',n_jobs= -1, factor=4, resource='n_samples', min_resources='smallest', aggressive_elimination=False, random_state=0)
+            self.model = HalvingRandomSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_jobs=-1, n_candidates='exhaust', factor=4, resource='n_samples', min_resources='smallest', aggressive_elimination=False, random_state=rng)
 
         self.model.fit(X_train, y_train)
         self.best_params = self.model.best_params_
@@ -77,6 +80,6 @@ class Classifier :
 
     def load(self,new_name=None,path='../models/'):
         if new_name == None:
-            self.model = load(f'{path}{self.name}.joblib')
+            self.model = load(f'{path}{self.name}')
         else :
-            self.model = load(f'{path}{new_name}.joblib')
+            self.model = load(f'{path}{new_name}')
