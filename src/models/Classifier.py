@@ -78,6 +78,6 @@ class Classifier :
 
     def load(self,new_name=None,path='../models/'):
         if new_name == None:
-            self.model = load(f'{path}{self.name}.joblib')
+            self.model = load(f'{path}{self.name}')
         else :
-            self.model = load(f'{path}{new_name}.joblib')
+            self.model = load(f'{path}{new_name}')
