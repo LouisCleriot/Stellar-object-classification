@@ -1,5 +1,6 @@
 from joblib import dump, load
 from sklearn.experimental import enable_halving_search_cv
+from sklearn.preprocessing import RobustScaler
 from sklearn.model_selection import HalvingRandomSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
@@ -26,7 +27,7 @@ class Classifier :
     def predict(self,X):
         return self.model.predict(X)
 
-    def hyperparameter_tuning(self, X_train, y_train, parameters, search_type='grid', cv=5, scoring='f1_macro', n_iteration=100):
+    def hyperparameter_tuning(self, X_train, y_train, parameters, search_type='grid', cv=5, scoring='f1_macro', n_iteration=100, n_jobs=-1):
         rng = np.random.RandomState(0)
         pipeline_steps = [
                 ('preprocess', ColumnTransformer(
@@ -43,13 +44,13 @@ class Classifier :
         parameters = {'model__' + key: value for key, value in parameters.items()}
 
         if search_type == 'grid':
-            self.model = GridSearchCV(self.model, parameters, cv=cv, scoring=scoring)
+            self.model = GridSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_jobs=n_jobs, random_state=rng)
         elif search_type == 'random':
-            self.model = RandomizedSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_iter=n_iteration)
+            self.model = RandomizedSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_iter=n_iteration, n_jobs=n_jobs, random_state=rng)
         elif search_type == 'halving-random':
-            self.model = HalvingRandomSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_jobs=-1, n_candidates='exhaust', factor=4, resource='n_samples', min_resources='smallest', aggressive_elimination=False, random_state=rng)
+            self.model = HalvingRandomSearchCV(self.model, parameters, cv=cv, scoring=scoring, n_jobs=n_jobs, n_candidates='exhaust', factor=4, resource='n_samples', min_resources='smallest', aggressive_elimination=False, random_state=rng)
 
-        self.train(X_train, y_train)
+        self.model.fit(X_train, y_train)
         self.best_params = self.model.best_params_
         self.model = self.model.best_estimator_
 
@@ -79,6 +80,6 @@ class Classifier :
 
     def load(self,new_name=None,path='../models/'):
         if new_name == None:
-            self.model = load(f'{path}{self.name}')
+            self.model = load(f'{path}{self.name}.joblib')
         else :
-            self.model = load(f'{path}{new_name}')
+            self.model = load(f'{path}{new_name}.joblib')
