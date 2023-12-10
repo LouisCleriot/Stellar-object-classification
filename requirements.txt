@@ -19,6 +19,7 @@ jupyter
 imbalanced-learn
 scikit-learn-intelex
 halo
+huggingface_hub
 
 # test requirements
 pytest
