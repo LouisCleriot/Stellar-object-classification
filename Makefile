@@ -36,6 +36,9 @@ features:
 train: 
 	$(PYTHON_INTERPRETER) src/models/train_model.py  $(if $(MODEL),--model $(MODEL)) $(if $(DATA),--data $(DATA)) $(if $(NAME),--name $(NAME))
 
+## Download model from huggingface
+download_model:
+	$(PYTHON_INTERPRETER) src/models/download.py $(MODEL)
 ## Delete all compiled Python files
 clean:
 	find . -type f -name "*.py[co]" -delete
