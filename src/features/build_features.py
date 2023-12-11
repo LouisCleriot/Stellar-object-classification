@@ -1,4 +1,4 @@
-from sklearn.preprocessing import RobustScaler
+from sklearn.preprocessing import RobustScaler, LabelEncoder
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
@@ -27,18 +27,6 @@ def balance_dataset(data):
     df_undersampled['class'] = y_cc
 
     return df_oversampled, df_undersampled
-    
-    def fit(self,data):
-        """ Apply feature engineering on the data to fit the scaler and pca"""
-        data = self.remove_correlation(data,fit=True)
-        data = self.scale_data(data,fit=True)
-        
-    def process_test_data(self,data):
-        """ Apply feature engineering on the test data"""
-        data = self.remove_correlation(data,fit=False)
-        data = self.scale_data(data,fit=False)
-        return data
-    
 
 @click.command()
 def main():

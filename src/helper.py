@@ -1,9 +1,13 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc
+from sklearn.preprocessing import LabelEncoder
 
 def plot_roc_curve (model, X_test, y_test):
+    le = LabelEncoder()
+    y_test = le.fit(y_test).transform(y_test)
     y_score = model.predict_proba(X_test)
+
     fpr = dict()
     tpr = dict()
     roc_auc = dict()
