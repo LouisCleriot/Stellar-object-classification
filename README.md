@@ -1,5 +1,4 @@
-projet-ift712
-==============================
+# projet-ift712
 
 Les étudiantes et étudiants inscrits au cours IFT712 sont tenus de faire un projet de session en python en équipe de 2 ou 3 (obligatoire). Le projet a pour objectif de tester au moins six méthodes de classification sur une base de données Kaggle (www.kaggle.com) avec la bibliothèque scikit-learn (https://scikit-learn.org). Les équipes sont libres de choisir la base de données de leur choix, mais une option simple est celle du challenge de classification de feuilles d’arbres (www.kaggle.com/c/leaf-classification). Pour ce projet, on s’attend à ce que les bonnes pratiques de cross-validation et de recherche d’hyper-paramètres soient mises de l’avant pour identifier la meilleure solution possible pour résoudre le problème. 
 
@@ -33,64 +32,13 @@ Repo git organisation
 1 branche feature par fonctionnalité \
     ex : feature/random-forest \
          feature/data-exploration  \
-1 branche hotfix par correction de bug 
-
-### comment utiliser les branches
-
-La branche principale de développement est la branche develop.  \
-Pour chaque nouvelle fonctionnalité une branches features est créées à partir de develop et mergées dans develop une fois terminée.  \
-On ne push jamais sur develop directement.  \
-On ne push jamais sur master directement.  \
-On merge develop dans master à chaque fin de sprint. Quand un livrable fonctionne sans bug \
-En cas de bug sur master, on crée une branche hotfix à partir de master, on corrige le bug et on merge dans master et develop. \
-
-### commandes git
-
-verifier la branch courante
-```bash
-git branch
-```
-creer une nouvelle branche
-```bash
-# de zero
-git checkout -b <branch_name>
-# a partir d'une branche existante (ex: creer une branche feature/random-forest a partir de develop)
-git checkout develop
-git checkout -b feature/random-forest
-```
-
-changer de branche
-```bash
-git checkout <branch_name>
-```
-merger une branche dans une autre (ex: merge feature/random-forest dans develop)
-```bash
-git checkout feature/random-forest
-git pull origin develop
-git checkout develop
-git merge feature/random-forest
-git push origin develop
-#supprimer la branche localement
-git branch -d feature-branch 
-#supprimer la branche sur le remote
-git push origin --delete feature-branch 
-```
-commiter sur une branche
-```bash
-git add .
-git commit -m "message"
-git push origin <branch_name>
-```
-
-
-
 
 
 Project Organization
 ------------
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
+    ├── LICENSE            <- MIT License
+    ├── Makefile           <- Makefile with commands like `make data` or `make features`
     ├── README.md          <- The top-level README for developers using this project.
     ├── data
     │   ├── external       <- Data from third party sources.
@@ -98,56 +46,45 @@ Project Organization
     │   ├── processed      <- The final, canonical data sets for modeling.
     │   └── raw            <- The original, immutable data dump.
     │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
     │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
+    ├── models             <- Trained and serialized models
+    │   
+    ├── notebooks          <- Jupyter notebooks (for training and data exploration)
+    │   ├── Data           <- Data exploration notebooks
+    │   └── Models         <- Training notebooks
     │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
+    ├── reports           
+    │   └── figures        <- Generated graphics and figures with make visualize
+    |   └── report.pdf
     │
     ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
     │
     ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
     ├── src                <- Source code for use in this project.
     │   ├── __init__.py    <- Makes src a Python module
     │   │
     │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
+    │   │   |── make_dataset.py
+    |   |   └── download.py
     │   │
     │   ├── features       <- Scripts to turn raw data into features for modeling
     │   │   └── build_features.py
     │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
+    │   ├── models         <- Class for each model                
+    │   │   ├── Classifiers.py
+    │   │   └── download.py
     │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
+    │   └── visualization  <- Scripts to create comparative plots of the models
     │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
-Initialisation du projet
-------------
+## Initialize project
 
 
 ### Docker
 
-1. Installer docker
+1. Install docker
 
-verifier que docker est installé
-```bash
-chmod +x ./checkDocker.sh
-./checkDocker.sh
-```
-Si ce n'est pas le cas, installer docker grace au commandes suivante
+If docker is not installed on your machine, you can install it with the following commands:
 ```bash
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl gnupg
@@ -161,7 +98,7 @@ echo \
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
-2. Lancer le container
+2. Build and run docker
 
 ```bash
 chmod +x ./buildandrunDocker.sh
@@ -170,36 +107,53 @@ chmod +x ./buildandrunDocker.sh
 
 ### Virtualenv
 
-0. Installer python 11.6
+0. Install python 3.9
 
 ```bash
-sudo apt-get install python3.11
+sudo apt-get install python3.9
 ```
 
-1. Installer virtualenv
+1. Use makefile to create virtualenv
 
 ```bash
-sudo apt install python3.11-venv
+make create_environment
 ```
 
-2. Créer un environnement virtuel
+### How to use the project
+
+1. Download the data with the link at the start of the README.md or :
 
 ```bash
-python3.11 -m venv env
+make download_data
 ```
 
-3. Activer l'environnement virtuel
+2. Create intermediate data
 
 ```bash
-source env/bin/activate
+make data
 ```
 
-4. Installer les dépendances
+3. Create features for final data
 
 ```bash
-pip install -e .
+make features
+```
+4. Train the models with the notebooks in the notebooks/Models folder or download the models :
+
+```bash
+make download_models
+```
+5. Visualize the results with the notebooks in the notebooks/Data folder or download the results :
+
+```bash
+make visualize
 ```
 
+All this steps can be done with the following command :
+
+```bash
+make run
+```
 
 
 

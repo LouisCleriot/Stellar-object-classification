@@ -2,68 +2,67 @@ Todos :
     ✔ create the todo list @critical @started(23-11-21 14:31) @done(23-11-22 10:02) @lasted(19h31m30s)
     ☐ feature selection @started(23-11-22 10:03)
     ☐ gerer data imbalance @started(23-11-26 16:19)
-    ☐ random forest
-    ☐ logistic regression
-    ☐ SVM
-    ☐ Neural Network 
-    ☐ Naive Bayes
-    ☐ KNN
+    ✔ random forest @done(23-12-12 01:52)
+    ✔ logistic regression @done(23-12-12 01:52)
+    ✔ SVM @done(23-12-12 01:52)
+    ✔ Neural Network @done(23-12-12 01:52)
+    ✔ Naive Bayes @done(23-12-12 01:52)
+    ✔ KNN @done(23-12-12 01:52)
 
 feature selection : 
     ✔ feature scalingd @done(23-11-23 08:48)
-    ☐ check for redundant features (matrix correlation)
-    ☐ combien highlt correlated features with PCA/UMAP
-    ☐ choose for witch model to use feature selection :
-        - random forest
-        - logistic regression/SVM/neural network/Naive Bayes/KNN
+    ✔ check for redundant features (matrix correlation) @done(23-12-12 01:52)
+    ✔ combien highlt correlated features with PCA/UMAP @done(23-12-12 01:52)
+    ✔ choose for witch model to use feature selection : @done(23-12-12 01:52)
+        ✔ random forest @done(23-12-12 01:52)
+        ✔ logistic regression/SVM/neural network/Naive Bayes/KNN @done(23-12-12 01:52)
 
 gerer data imbalance :
-    ☐ undersampling @started(23-11-26 22:11)
-    ☐ oversampling (SMOTE) @started(23-11-26 21:20)
+    ✔ undersampling @started(23-11-26 22:11) @done(23-12-12 01:52) @lasted(2w1d3h41m45s)
+    ✔ oversampling (SMOTE) @started(23-11-26 21:20) @done(23-12-12 01:52) @lasted(2w1d4h32m47s)
     ✔ pas gérer (avec et sans class_weight) @done(23-11-26 21:20)
 
 random forest :
     ✔ choose metrics (accuracy, precision, recall, f1, roc_auc) @done(23-11-27 07:51)
-    ☐ hyperparameter tuning with gridsearch with crossvalidation (n_estimators, max_depth)
-    ☐ evaluate model with metrics
-    ☐ learning curve
-    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
+    ✔ hyperparameter tuning with gridsearch with crossvalidation (n_estimators, max_depth) @done(23-12-12 01:52)
+    ✔ evaluate model with metrics @done(23-12-12 01:52)
+    ✔ learning curve @done(23-12-12 01:52)
+    ✔ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram) @done(23-12-12 01:52)
 
 logistic regression : 
-    ☐ choose metrics
-    ☐ train with multimonial 
-    ☐ hyperparameter tuning with gridsearch with crossvalidation (C, penalty,solver)
-    ☐ evaluate model with metrics
-    ☐ learning curve
-    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
+    ✔ choose metrics @done(23-12-12 01:52)
+    ✔ train with multimonial @done(23-12-12 01:52)
+    ✔ hyperparameter tuning with gridsearch with crossvalidation (C, penalty,solver) @done(23-12-12 01:53)
+    ✔ evaluate model with metrics @done(23-12-12 01:53)
+    ✔ learning curve @done(23-12-12 01:53)
+    ✔ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram) @done(23-12-12 01:53)
 
 SVM :
-    ☐ choix du kernel (linear, rbf, poly, sigmoid)
-    ☐ hyperparameter tuning with gridsearch with crossvalidation (C, gamma, degree) ajuster en fonction du kernel
-    ☐ evaluate model with metrics
-    ☐ learning curve
-    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
-
+    ✔ choix du kernel (linear, rbf, poly, sigmoid) @done(23-12-12 01:53)
+    ✔ hyperparameter tuning with gridsearch with crossvalidation (C, gamma, degree) ajuster en fonction du kernel @done(23-12-12 01:53)
+    ✔ evaluate model with metrics @done(23-12-12 01:53)
+    ✔ learning curve @done(23-12-12 01:53)
+    ✔ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram) @done(23-12-12 01:53)
 Neural Network :
-    ☐ network architecture (input layer, hidden layers, output layer)
-    ☐ choose activation functions (relu, sigmoid, tanh, softmax)
-    ☐ choose optimizer (adam, sgd, rmsprop)
-    ☐ choose loss function (binary_crossentropy, categorical_crossentropy)
-    ☐ choose metrics (accuracy, f1)
-    ☐ train model (epochs, batch_size)
-    ☐ use validation set to avoid overfitting (dropout, early stopping)
+    ✔ network architecture (input layer, hidden layers, output layer) @done(23-12-12 01:53)
+    ✔ choose activation functions (relu, sigmoid, tanh, softmax) @done(23-12-12 01:53)
+    ✔ choose optimizer (adam, sgd, rmsprop) @done(23-12-12 01:53)
+    ✔ choose loss function (binary_crossentropy, categorical_crossentropy) @done(23-12-12 01:53)
+    ✔ choose metrics (accuracy, f1) @done(23-12-12 01:53)
+    ✔ train model (epochs, batch_size) @done(23-12-12 01:53)
+    ✔ use validation set to avoid overfitting (dropout, early stopping) @done(23-12-12 01:53)
 
 Naive Bayes :
-    ☐ choose type of naive bayes (gaussian, multinomial, bernoulli)
-    ☐ evaluate model with metrics
-    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
+    ✔ choose type of naive bayes (gaussian, multinomial, bernoulli) @done(23-12-12 01:53)
+    ✔ evaluate model with metrics @done(23-12-12 01:53)
+    ✔ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram) @done(23-12-12 01:53)
 
 KNN :
-    ☐ choose metrics
-    ☐ hyperparameter tuning with gridsearch with crossvalidation (n_neighbors, weights, p)
-    ☐ evaluate model with metrics
-    ☐ learning curve
-    ☐ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram)
+    ✔ choose metrics @done(23-12-12 01:53)
+    ✔ hyperparameter tuning with gridsearch with crossvalidation (n_neighbors, weights, p) @done(23-12-12 01:53)
+    ✔ evaluate model with metrics @done(23-12-12 01:53)
+    ✔ learning curve @done(23-12-12 01:53)
+    ✔ les resultats a présenter (matrice de confusion/precision, recall, f1/roc curve, auc score/feature importance diagram) @done(23-12-12 01:53)
 
     
 
