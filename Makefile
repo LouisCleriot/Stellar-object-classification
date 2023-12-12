@@ -55,8 +55,8 @@ clean:
 
 ## Lint using flake8
 lint:
-	autopep8 --in-place --aggressive --aggressive src/**/*.py
-	flake8 src
+	autopep8 --in-place --max-line-length 100 --aggressive --aggressive --recursive src/
+	flake8 --max-line-length=100 --ignore=C901,W503 src
 
 ## Set up python interpreter environment
 create_environment:
