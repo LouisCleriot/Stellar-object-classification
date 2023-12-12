@@ -23,7 +23,10 @@ endif
 requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
-
+#download data
+download_data:
+	$(PYTHON_INTERPRETER) src/data/download.py 
+	
 ## Make Dataset
 data: 
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/interim
