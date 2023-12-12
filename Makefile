@@ -8,7 +8,7 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROFILE = default
 PROJECT_NAME = projet-ift712
 PYTHON_INTERPRETER = python3
-
+MODEL = "ALL"
 ifeq (,$(shell which conda))
 HAS_CONDA=False
 else
@@ -23,10 +23,11 @@ endif
 requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+
 #download data
 download_data:
 	$(PYTHON_INTERPRETER) src/data/download.py 
-	
+
 ## Make Dataset
 data: 
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/interim
@@ -41,7 +42,11 @@ download_model:
 
 ## Visualize model 
 visualize :
-	$(PYTHON_INTERPRETER) src/visualization/visualize.py $(MODEL)
+	$(PYTHON_INTERPRETER) src/visualization/visualize.py
+
+## launch python script
+run: download_data data features downwload_model visualize
+	
 
 ## Delete all compiled Python files
 clean:
@@ -50,11 +55,8 @@ clean:
 
 ## Lint using flake8
 lint:
+	autopep8 --in-place --aggressive --aggressive src/**/*.py
 	flake8 src
-
-## launch python script
-run:
-	$(PYTHON_INTERPRETER) src/visualization/visualize.py
 
 ## Set up python interpreter environment
 create_environment:

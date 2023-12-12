@@ -5,6 +5,7 @@ click
 Sphinx
 coverage
 flake8
+autopep8
 python-dotenv>=0.5.1
 
 # project requirements
