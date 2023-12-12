@@ -118,6 +118,11 @@ sudo apt-get install python3.9
 ```bash
 make create_environment
 ```
+2. Install requirments
+
+```bash
+make requirements
+```
 
 ### How to use the project
 
@@ -154,6 +159,12 @@ All this steps can be done with the following command :
 ```bash
 make run
 ```
+### usefull command
+
+```bash
+./launchnotebook.sh 
+```
+is used to launch Jupiter daemon to use notebooks on web navigator
 
 
 
