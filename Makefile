@@ -45,7 +45,7 @@ visualize :
 	$(PYTHON_INTERPRETER) src/visualization/visualize.py
 
 ## launch python script
-run: download_data data features downwload_model visualize
+run: download_data data features download_model visualize
 	
 
 ## Delete all compiled Python files
