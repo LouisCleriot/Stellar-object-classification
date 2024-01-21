@@ -1,6 +1,6 @@
-# projet-ift712
+# Stellar object classification
 
-Les étudiantes et étudiants inscrits au cours IFT712 sont tenus de faire un projet de session en python en équipe de 2 ou 3 (obligatoire). Le projet a pour objectif de tester au moins six méthodes de classification sur une base de données Kaggle (www.kaggle.com) avec la bibliothèque scikit-learn (https://scikit-learn.org). Les équipes sont libres de choisir la base de données de leur choix, mais une option simple est celle du challenge de classification de feuilles d’arbres (www.kaggle.com/c/leaf-classification). Pour ce projet, on s’attend à ce que les bonnes pratiques de cross-validation et de recherche d’hyper-paramètres soient mises de l’avant pour identifier la meilleure solution possible pour résoudre le problème. 
+Students enrolled in the IFT712 course are required to complete a team python project in groups of 2 or 3 (mandatory). The project aims to test at least six classification methods on a Kaggle database (www.kaggle.com) using the scikit-learn library (https://scikit-learn.org). Teams are free to choose the database of their choice, but a simple option is the tree leaf classification challenge (www.kaggle.com/c/leaf-classification). For this project, we expect good practices of cross-validation and hyper-parameter tuning to be employed to identify the best possible solution for solving the problem.
 
 Le barême de correction est le suivant : \
 Qualité du code - Commentaires 	 /10 \
@@ -12,26 +12,35 @@ Rapport 	 /70 \
 ... Analyse des résultats \
 	 /20
 
+The grading scale is as follows: \
+Code Quality - Comments /10 \
+Design Choices /10 \
+Project Management (Git) /10 \
+Report /70 \
+... Scientific Approach \
+/50  \
+... Analysis of Results \
+/20 \
 
-Données choisies
+Selected Data
 ------------
 Stellar Classification Dataset - SDSS17
 
-En astronomie, la classification stellaire est la classification des étoiles sur la base de leurs caractéristiques spectrales. Le système de classification des galaxies, des quasars et des étoiles est l'un des plus fondamentaux de l'astronomie. Le catalogage précoce des étoiles et de leur distribution dans le ciel a permis de comprendre qu'elles constituent notre propre galaxie et, suite à la distinction qu'Andromède était une galaxie séparée de la nôtre, de nombreuses galaxies ont commencé à être étudiées grâce à la construction de télescopes plus puissants. Ce datasat vise à classer les étoiles, les galaxies et les quasars en fonction de leurs caractéristiques spectrales.
+In astronomy, stellar classification is the classification of stars based on their spectral characteristics. The classification system for galaxies, quasars, and stars is one of the most fundamental in astronomy. Early cataloging of stars and their distribution in the sky has helped understand that they constitute our own galaxy, and following the distinction that Andromeda was a separate galaxy from ours, many galaxies began to be studied thanks to the construction of more powerful telescopes. This dataset aims to classify stars, galaxies, and quasars based on their spectral characteristics.
 
 https://www.kaggle.com/datasets/fedesoriano/stellar-classification-dataset-sdss17/data
 
 
-Repo git organisation
+Git repo organization
 ------------
 
-### Le repo git suit l'organisation Git Flow. 
+### The git repo follows the Git Flow organization.
 
-1 branche master \
-1 branche develop \
-1 branche feature par fonctionnalité \
-    ex : feature/random-forest \
-         feature/data-exploration  \
+1 master branch \
+1 develop branch \
+1 feature branch per feature \
+e.g., feature/random-forest \
+feature/data-exploration \
 
 
 Project Organization
