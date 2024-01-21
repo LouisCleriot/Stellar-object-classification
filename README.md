@@ -2,16 +2,6 @@
 
 Students enrolled in the IFT712 course are required to complete a team python project in groups of 2 or 3 (mandatory). The project aims to test at least six classification methods on a Kaggle database (www.kaggle.com) using the scikit-learn library (https://scikit-learn.org). Teams are free to choose the database of their choice, but a simple option is the tree leaf classification challenge (www.kaggle.com/c/leaf-classification). For this project, we expect good practices of cross-validation and hyper-parameter tuning to be employed to identify the best possible solution for solving the problem.
 
-Le barême de correction est le suivant : \
-Qualité du code - Commentaires 	 /10 \
-Choix de design 	 /10 \
-Gestion de projet (Git) 	 /10 \
-Rapport 	 /70 \
-... Démarche scientifique \
-	 /50 \
-... Analyse des résultats \
-	 /20
-
 The grading scale is as follows: \
 Code Quality - Comments /10 \
 Design Choices /10 \
